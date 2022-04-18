@@ -28,7 +28,7 @@ export default defineComponent({
   props: {
     imageSrc: {
       type: String,
-      default: "src/assets/to-learn.jpg",
+      default: "../assets/to-learn.jpg",
     },
     title: {
       type: String,
