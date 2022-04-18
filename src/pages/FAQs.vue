@@ -38,7 +38,7 @@ export default defineComponent({
 
   setup() {
     return {
-      src: ref("../assets/abcd.jpg"),
+      src: ref("abcd.jpg"),
       paths: ref(["Home", "FAQs"]),
     };
   },
