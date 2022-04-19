@@ -1,6 +1,6 @@
 <template>
   <q-layout id="layout" view="lHh Lpr lFf">
-    <NavBar />
+    <NavBar v-if="showNavBar" />
 
     <q-page-container>
       <router-view />
@@ -12,6 +12,7 @@
 
 <script>
 import { defineComponent } from "vue";
+import { useRoute } from "vue-router";
 import NavBar from "../shared/NavBar.vue";
 import Footer from "../shared/Footer.vue";
 
@@ -21,6 +22,17 @@ export default defineComponent({
   components: {
     NavBar,
     Footer,
+  },
+
+  computed: {
+    showNavBar() {
+      return useRoute().path === "/register" ||
+        useRoute().path === "/login" ||
+        useRoute().path === "/login/" ||
+        useRoute().path === "/register/"
+        ? false
+        : true;
+    },
   },
 });
 </script>
