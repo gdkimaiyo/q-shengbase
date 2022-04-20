@@ -24,7 +24,9 @@
 
 <script>
 import { defineComponent, ref } from "vue";
+import { Notify } from "quasar";
 import AfterNavBar from "../components/AfterNavBar.vue";
+import { getLocation, getUsers, saveLog } from "../shared/services/UserService";
 
 export default defineComponent({
   // eslint-disable-next-line vue/multi-word-component-names
@@ -32,6 +34,63 @@ export default defineComponent({
 
   components: {
     AfterNavBar,
+  },
+
+  setup() {
+    return {
+      location: ref({}),
+      isLoading: false,
+      users: ref([]),
+    };
+  },
+
+  methods: {
+    async getVisitorIP() {
+      getLocation()
+        .then((response) => {
+          this.location = response;
+
+          const payload = {
+            city: this.location?.city,
+            country: this.location?.countryName,
+            countryCode: this.location?.countryCode,
+            ipAddress: this.location?.ipAddress,
+          };
+
+          saveLog(payload)
+            .then((response) => {})
+            .catch((error) => {
+              console.log(error);
+            });
+        })
+        .catch((error) => {
+          console.log(error);
+        });
+    },
+
+    getAllUsers() {
+      this.isLoading = true;
+      getUsers()
+        .then((response) => {
+          this.users = response.data;
+          this.isLoading = false;
+          // console.log(JSON.parse(JSON.stringify(this.users)));
+        })
+        .catch((error) => {
+          console.log(error);
+          this.isLoading = false;
+          Notify.create({
+            type: "negative",
+            message: "Error! Unable to fetch users.",
+            group: false,
+          });
+        });
+    },
+  },
+
+  mounted() {
+    this.getVisitorIP();
+    this.getAllUsers();
   },
 });
 </script>

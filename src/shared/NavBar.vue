@@ -10,7 +10,7 @@
           <q-btn no-caps flat to="/about" class="nav-btn" label="About" />
           <q-btn no-caps flat to="/faqs" class="nav-btn" label="FAQs" />
           <q-btn no-caps flat to="/register" class="nav-btn" label="Register" />
-          <q-btn no-caps flat to="/login" class="nav-btn" label="Login" />
+          <q-btn no-caps flat to="/login" class="nav-btn" label="Sign In" />
         </div>
 
         <q-btn
@@ -39,7 +39,7 @@
               </q-item>
 
               <q-item to="/login" exact clickable v-ripple>
-                <q-item-section> Login </q-item-section>
+                <q-item-section> Sign In </q-item-section>
               </q-item>
             </q-list>
           </q-menu>
