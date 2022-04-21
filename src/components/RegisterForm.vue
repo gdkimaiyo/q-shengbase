@@ -8,7 +8,10 @@
       dense
       type="text"
       lazy-rules
-      :rules="[(val) => validateFullName(val) || 'Please provide firstname and lastname',]"
+      :rules="[
+        (val) =>
+          validateFullName(val) || 'Please provide firstname and lastname',
+      ]"
     />
     <q-input
       class="q-py-md"
@@ -18,7 +21,9 @@
       dense
       type="email"
       lazy-rules
-      :rules="[(val) => validateEmail(val) || 'Please provide a valid email address',]"
+      :rules="[
+        (val) => validateEmail(val) || 'Please provide a valid email address',
+      ]"
     />
     <q-input
       class="q-py-md"
@@ -28,7 +33,9 @@
       dense
       :type="isPwd ? 'password' : 'text'"
       lazy-rules
-      :rules="[(val) => validatePass(val) || 'Password should be 4 characters long',]"
+      :rules="[
+        (val) => validatePass(val) || 'Password should be 4 characters long',
+      ]"
     >
       <template v-slot:append>
         <q-icon
@@ -91,7 +98,7 @@ export default defineComponent({
   methods: {
     async onSubmit() {
       this.isLoading = true;
-      
+
       const data = {
         firstname: this.getName("first", this.fullname),
         lastname: this.getName("last", this.fullname),

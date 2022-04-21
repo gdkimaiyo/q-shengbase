@@ -1,18 +1,60 @@
 <template>
-  <q-page class="bg-grey-3 column q-py-xl">
-    <div class="main-page q-pa-md">
+  <q-page class="bg-grey-3 page column q-py-xl">
+    <div class="section q-pa-md">
       <div class="register-section">
-        <div class="register-info">
-          <p>
-            Lorem ipsum dolor sit amet, consectetur adipisicing elit. Minima
-            molestiae maxime unde harum quidem nobis, alias, voluptatum cumque
-            blanditiis tempore nostrum? Libero eos magnam dolores similique, est
-            delectus quia modi?
-          </p>
+        <div class="register-info q-pt-xl">
+          <p class="q-mt-md">Registering for an account enables you to:</p>
+          <div class="benefits">
+            <q-list dense class="q-ml-md">
+              <q-item>
+                <q-item-section>
+                  <span
+                    ><q-icon name="fas fa-circle-check q-pr-sm" size="24px" />
+                    Add a sheng word
+                  </span>
+                </q-item-section>
+              </q-item>
+
+              <q-item class="q-my-md">
+                <q-item-section>
+                  <span>
+                    <q-icon name="fas fa-circle-check q-pr-sm" size="24px" />
+                    Vote for a sheng word
+                  </span>
+                </q-item-section>
+              </q-item>
+
+              <q-item class="q-my-md">
+                <q-item-section>
+                  <span>
+                    <q-icon name="fas fa-circle-check q-pr-sm" size="24px" />
+                    Participate in weekly ShengBase Trivia
+                  </span>
+                </q-item-section>
+              </q-item>
+            </q-list>
+            <p>
+              <span
+                class="faqs-link text-weight-bold cursor-pointer"
+                @click="isOpen = true"
+              >
+                Find out more <q-icon name="fas fa-angle-right" />
+              </span>
+            </p>
+            <div class="q-pa-md q-gutter-sm">
+              <q-dialog v-model="isOpen">
+                <RegisterFAQs />
+              </q-dialog>
+            </div>
+          </div>
         </div>
         <div class="register-form">
-          <h5 class="logo-btn href-link q-my-none q-pb-md" @click="navigateTo('/')">ShengBase</h5>
-          <div class="text-h5 q-pb-sm text-weight-bold">Create your Account</div>
+          <h5 class="logo-btn q-my-none q-pb-md" @click="navigateTo('/')">
+            <span class="href-link">ShengBase</span>
+          </h5>
+          <div class="text-h5 q-pb-sm text-weight-bold">
+            Create your Account
+          </div>
           <div class="text-subtitle2 q-pb-md text-weight-bold">
             Already have an account?
             <a class="href-link" @click="navigateTo('/login')">Sign In</a>
@@ -25,8 +67,9 @@
 </template>
 
 <script>
-import { defineComponent } from "vue";
+import { defineComponent, ref } from "vue";
 import RegisterForm from "../components/RegisterForm.vue";
+import RegisterFAQs from "../components/RegisterFAQs.vue";
 
 export default defineComponent({
   // eslint-disable-next-line vue/multi-word-component-names
@@ -34,6 +77,16 @@ export default defineComponent({
 
   components: {
     RegisterForm,
+    RegisterFAQs,
+  },
+
+  setup() {
+    return {
+      isOpen: ref(false),
+      slide: ref(1),
+      lorem:
+        "Lorem ipsum dolor sit amet consectetur, adipisicing elit. Natus, ratione eum minus fuga, quasi dicta facilis corporis magnam, suscipit at quo nostrum!",
+    };
   },
 
   methods: {
@@ -45,7 +98,7 @@ export default defineComponent({
 </script>
 
 <style lang="scss" scoped>
-.main-page {
+.section {
   width: 100%;
   max-width: 960px;
   margin: 0 auto;
@@ -60,6 +113,9 @@ export default defineComponent({
 }
 .href-link:hover {
   color: rgba(12, 69, 176, 0.85);
+}
+.faqs-link:hover {
+  color: rgba(255, 255, 1255, 0.7);
 }
 
 .register-section {
@@ -93,8 +149,12 @@ export default defineComponent({
 }
 
 @media only screen and (max-width: 575px) {
-  .main-page {
-    padding: 8px;
+  .page {
+    margin-top: 0 !important;
+    background-color: #ffffff !important;
+  }
+  .section {
+    padding: 0;
   }
   .register-section {
     border-radius: 4px;
