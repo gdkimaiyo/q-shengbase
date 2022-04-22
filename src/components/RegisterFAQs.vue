@@ -6,8 +6,8 @@
     animated
     v-model="slide"
     control-color="primary"
-    navigation-icon="radio_button_unchecked"
     navigation
+    arrows
     padding
     height="fit-content"
     class="bg-white shadow-1 rounded-borders"
@@ -40,8 +40,6 @@ export default defineComponent({
     return {
       slide: ref(1),
       faqs: ref(REGISTER_FAQS),
-      lorem:
-        "Lorem ipsum dolor sit amet consectetur, adipisicing elit. Natus, ratione eum minus fuga, quasi dicta facilis corporis magnam, suscipit at quo nostrum!",
     };
   },
 });
