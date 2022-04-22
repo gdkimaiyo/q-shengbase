@@ -11,6 +11,9 @@
 const { configure } = require("quasar/wrappers");
 
 module.exports = configure(function (/* ctx */) {
+  // Load the environment variables from `.env` if it exists
+  require("dotenv").config();
+
   return {
     eslint: {
       // fix: true,
