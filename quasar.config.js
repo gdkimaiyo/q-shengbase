@@ -62,7 +62,9 @@ module.exports = configure(function (/* ctx */) {
 
       publicPath: process.env.NODE_ENV === "production" ? "/q-shengbase/" : "/",
       // analyze: true,
-      // env: {},
+      env: {
+        VUE_APP_BACKEND_API: process.env.VUE_APP_BACKEND_API,
+      },
       // rawDefine: {}
       // ignorePublicFolder: true,
       // minify: false,
