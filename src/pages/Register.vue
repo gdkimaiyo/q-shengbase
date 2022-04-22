@@ -62,6 +62,25 @@
           <RegisterForm />
         </div>
       </div>
+      <div class="info-mobile q-mt-lg q-mb-none q-pt-md">
+        <p class="q-my-none q-py-md q-px-lg">
+          Registering for an account enables you to add or vote for a sheng word
+          and participate in weekly ShengBase Trivia
+        </p>
+        <p class="q-my-none q-py-md q-px-lg">
+          <span
+            class="faqs-link text-weight-bold cursor-pointer"
+            @click="isOpen2 = true"
+          >
+            Find out more <q-icon name="fas fa-angle-right" />
+          </span>
+        </p>
+        <div class="q-pa-md q-gutter-sm">
+          <q-dialog v-model="isOpen2">
+            <RegisterFAQs />
+          </q-dialog>
+        </div>
+      </div>
     </div>
   </q-page>
 </template>
@@ -83,9 +102,7 @@ export default defineComponent({
   setup() {
     return {
       isOpen: ref(false),
-      slide: ref(1),
-      lorem:
-        "Lorem ipsum dolor sit amet consectetur, adipisicing elit. Natus, ratione eum minus fuga, quasi dicta facilis corporis magnam, suscipit at quo nostrum!",
+      isOpen2: ref(false),
     };
   },
 
@@ -127,25 +144,32 @@ export default defineComponent({
   // box-shadow: 0 3px 5px -1px #0003, 0 6px 10px #00000024, 0 0 4px #42b983;
   // box-shadow: 0px 1px 9px 2px rgba(0, 0, 0, 0.15);
 }
-.register-info {
-  width: 45%;
-  display: block;
+.register-info,
+.info-mobile {
   background-image: url("../assets/sky.png");
   background-repeat: no-repeat;
   background-size: cover;
   background-position: center center;
-  margin-left: 0;
   color: #ffffff;
+}
+.register-form {
+  width: 55%;
+  margin-left: 32px;
+  padding: 24px;
+}
+.register-info {
+  width: 45%;
+  display: block;
+  margin-left: 0;
   border-radius: 12px 0 0 12px;
 
   p {
     padding: 24px;
   }
 }
-.register-form {
-  width: 55%;
-  margin-left: 32px;
-  padding: 24px;
+
+.info-mobile {
+  display: none;
 }
 
 @media only screen and (max-width: 575px) {
@@ -169,6 +193,9 @@ export default defineComponent({
     width: 100%;
     max-width: 100%;
     margin-left: 0;
+  }
+  .info-mobile {
+    display: block;
   }
 }
 </style>
