@@ -18,11 +18,11 @@
       :name="faq.id"
       class="column no-wrap flex-center"
     >
-      <div class="text-h6 text-primary text-center q-pt-md">{{ faq.faq }}</div>
-      <div class="q-mt-md text-center q-px-sm">
+      <div class="text-h6 text-primary q-pt-md">{{ faq.faq }}</div>
+      <div class="q-mt-md q-px-sm">
         <span v-html="faq.desc"></span>
       </div>
-      <div class="q-mt-md text-center q-px-sm" v-if="faq.desc2">
+      <div class="q-mt-md q-px-sm" v-if="faq.desc2">
         <span v-html="faq.desc2"></span>
       </div>
     </q-carousel-slide>

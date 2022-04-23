@@ -1,5 +1,5 @@
 <template>
-  <q-page class="bg-grey-3 page column q-py-xl">
+  <q-page class="bg-grey-3 page column q-pt-xl">
     <div class="section q-pa-md">
       <div class="register-section">
         <div class="register-info q-pt-xl">
@@ -8,8 +8,8 @@
             <q-list dense class="q-ml-md">
               <q-item>
                 <q-item-section>
-                  <span
-                    ><q-icon name="fas fa-circle-check q-pr-sm" size="24px" />
+                  <span>
+                    <q-icon name="fas fa-circle-check q-pr-sm" size="24px" />
                     Add a sheng word
                   </span>
                 </q-item-section>
@@ -53,7 +53,7 @@
             <span class="href-link">ShengBase</span>
           </h5>
           <div class="text-h5 q-pb-sm text-weight-bold">
-            Create your Account
+            Create Your Account
           </div>
           <div class="text-subtitle2 q-pb-md text-weight-bold">
             Already have an account?
@@ -80,6 +80,18 @@
             <RegisterFAQs />
           </q-dialog>
         </div>
+      </div>
+      <div class="copyright text-center q-mb-lg q-pt-md">
+        <p class="q-my-none q-py-md q-px-lg">
+          &copy;{{ currentYear }},
+          <span style="color: rgba(0, 0, 0, 0.6)"> All Rights Reserved.</span>
+          <a @click="navigateTo('/')" class="text-weight-medium cursor-pointer">
+            ShengBase.
+          </a>
+          <a @click="navigateTo('/')" class="text-primary cursor-pointer">
+            Privary and Terms
+          </a>
+        </p>
       </div>
     </div>
   </q-page>
@@ -109,6 +121,13 @@ export default defineComponent({
   methods: {
     navigateTo(route) {
       this.$router.push(route);
+    },
+  },
+
+  computed: {
+    currentYear() {
+      const date = new Date();
+      return date.getFullYear();
     },
   },
 });
@@ -171,6 +190,9 @@ export default defineComponent({
 .info-mobile {
   display: none;
 }
+.copyright {
+  font-size: 14px;
+}
 
 @media only screen and (max-width: 575px) {
   .page {
@@ -196,6 +218,9 @@ export default defineComponent({
   }
   .info-mobile {
     display: block;
+  }
+  .copyright {
+    text-align: left;
   }
 }
 </style>
