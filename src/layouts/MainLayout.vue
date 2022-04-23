@@ -6,7 +6,7 @@
       <router-view />
     </q-page-container>
 
-    <Footer />
+    <Footer v-if="showNavBar" />
   </q-layout>
 </template>
 
