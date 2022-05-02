@@ -1,5 +1,5 @@
 <template>
-  <q-form class="form" @submit="onSubmit">
+  <q-form class="form" @submit.prevent="onSubmit">
     <q-input
       class="q-py-md"
       filled
@@ -45,7 +45,6 @@
 <script>
 import { defineComponent, ref } from "vue";
 import { Notify } from "quasar";
-import { registerUser } from "../shared/services/UserService";
 
 export default defineComponent({
   name: "LoginForm",
@@ -59,6 +58,17 @@ export default defineComponent({
     };
   },
 
+  computed: {
+    loggedIn() {
+      return this.$store.state.auth.status.loggedIn;
+    },
+  },
+  created() {
+    if (this.loggedIn) {
+      this.$router.push("/");
+    }
+  },
+
   methods: {
     async onSubmit() {
       this.isLoading = true;
@@ -68,45 +78,38 @@ export default defineComponent({
         password: this.password,
       };
 
-      // console.log(data);
-      setTimeout(() => {
-        this.isLoading = false;
-        Notify.create({
-          type: "warning",
-          message: "Sign In feature coming soon.",
-          group: false,
-        });
-      }, 3000);
-      return;
-
-      await registerUser(data)
-        .then((response) => {
-          if (response.message === "email already registered") {
-            Notify.create({
-              type: "warning",
-              message: "Error! Email is already registered.",
-              group: false,
-            });
-            this.isLoading = false;
-          } else {
-            Notify.create({
-              type: "positive",
-              message: "Success! Successfully registered.",
-              group: false,
-            });
-            this.$router.push("/");
-            this.isLoading = false;
-          }
-        })
-        .catch((error) => {
-          console.log(error);
+      await this.$store.dispatch("auth/login", data).then(
+        (res) => {
           Notify.create({
-            type: "negative",
-            message: "Error! Something went wrong while registering.",
+            type: "positive",
+            message: "Success. Sign-In successful.",
             group: false,
           });
           this.isLoading = false;
-        });
+          this.$router.push("/");
+        },
+        (error) => {
+          if (
+            error?.response?.status === 400 ||
+            error?.response?.status === 404
+          ) {
+            Notify.create({
+              type: "warning",
+              message: "Email or password do not match.",
+              group: false,
+            });
+          } else {
+            Notify.create({
+              type: "negative",
+              message: error?.response?.data?.message
+                ? error.response.data.message
+                : "Something went wrong while registering.",
+              group: false,
+            });
+          }
+          this.isLoading = false;
+        }
+      );
     },
 
     validateEmail(email) {
