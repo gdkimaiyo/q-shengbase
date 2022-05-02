@@ -1,5 +1,5 @@
 <template>
-  <q-form class="form" @submit="onSubmit">
+  <q-form class="form" @submit.prevent="onSubmit">
     <q-input
       class="q-py-md"
       filled
@@ -78,7 +78,6 @@
 <script>
 import { defineComponent, ref } from "vue";
 import { Notify } from "quasar";
-import { registerUser } from "../shared/services/UserService";
 
 export default defineComponent({
   name: "RegisterForm",
@@ -95,6 +94,18 @@ export default defineComponent({
     };
   },
 
+  computed: {
+    loggedIn() {
+      return this.$store.state.auth.status.loggedIn;
+    },
+  },
+
+  created() {
+    if (this.loggedIn) {
+      this.$router.push("/");
+    }
+  },
+
   methods: {
     async onSubmit() {
       this.isLoading = true;
@@ -106,35 +117,35 @@ export default defineComponent({
         password: this.password,
       };
 
-      await registerUser(data)
-        .then((response) => {
-          if (response.message === "email already registered") {
+      await this.$store.dispatch("auth/register", data).then(
+        (res) => {
+          Notify.create({
+            type: "positive",
+            message: "Success! Registration successful.",
+            group: false,
+          });
+          this.isLoading = false;
+          this.$router.push("/login");
+        },
+        (error) => {
+          if (error?.response?.status === 409) {
             Notify.create({
               type: "warning",
               message: "Error! Email is already registered.",
               group: false,
             });
-            this.isLoading = false;
           } else {
             Notify.create({
-              type: "positive",
-              message: "Success! Successfully registered.",
+              type: "negative",
+              message: error?.response?.data?.message
+                ? error.response.data.message
+                : "Something went wrong while registering.",
               group: false,
             });
-            this.$router.push("/");
-            this.isLoading = false;
           }
-        })
-        .catch((error) => {
-          console.log(error);
-          Notify.create({
-            type: "negative",
-            message: "Error! Something went wrong while registering.",
-            group: false,
-          });
           this.isLoading = false;
-        });
-
+        }
+      );
       // this.clearForm();
     },
 

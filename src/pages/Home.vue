@@ -26,7 +26,11 @@
 import { defineComponent, ref } from "vue";
 import { Notify } from "quasar";
 import AfterNavBar from "../components/AfterNavBar.vue";
-import { getLocation, getUsers, saveLog } from "../shared/services/UserService";
+import {
+  getLocation,
+  getUsers,
+  saveLog,
+} from "../shared/services/user.service";
 
 export default defineComponent({
   // eslint-disable-next-line vue/multi-word-component-names
@@ -74,7 +78,7 @@ export default defineComponent({
         .then((response) => {
           this.users = response.data;
           this.isLoading = false;
-          // console.log(JSON.parse(JSON.stringify(this.users)));
+          console.log(JSON.parse(JSON.stringify(this.users)));
         })
         .catch((error) => {
           console.log(error);

@@ -9,8 +9,30 @@
         <div id="onDesktop">
           <q-btn no-caps flat to="/about" class="nav-btn" label="About" />
           <q-btn no-caps flat to="/faqs" class="nav-btn" label="FAQs" />
-          <q-btn no-caps flat to="/register" class="nav-btn" label="Register" />
-          <q-btn no-caps flat to="/login" class="nav-btn" label="Sign In" />
+          <q-btn
+            v-if="!loggedInUser"
+            no-caps
+            flat
+            to="/register"
+            class="nav-btn"
+            label="Register"
+          />
+          <q-btn
+            v-if="!loggedInUser"
+            no-caps
+            flat
+            to="/login"
+            class="nav-btn"
+            label="Sign In"
+          />
+          <q-btn
+            v-if="loggedInUser"
+            no-caps
+            flat
+            @click="doLogout()"
+            class="nav-btn"
+            label="Logout"
+          />
         </div>
 
         <q-btn
@@ -51,6 +73,7 @@
 
 <script>
 import { defineComponent, ref } from "vue";
+import { Notify } from "quasar";
 
 export default defineComponent({
   name: "NavBar",
@@ -61,8 +84,24 @@ export default defineComponent({
     };
   },
 
+  computed: {
+    loggedInUser() {
+      return this.$store.state.auth.user;
+    },
+  },
+
   methods: {
     goHome() {
+      this.$router.push("/");
+    },
+
+    doLogout() {
+      this.$store.dispatch("auth/logout");
+      Notify.create({
+        type: "positive",
+        message: "Success! Logout successful.",
+        group: false,
+      });
       this.$router.push("/");
     },
   },
