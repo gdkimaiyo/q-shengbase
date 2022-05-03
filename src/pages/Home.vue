@@ -78,7 +78,7 @@ export default defineComponent({
         .then((response) => {
           this.users = response.data;
           this.isLoading = false;
-          console.log(JSON.parse(JSON.stringify(this.users)));
+          // console.log(JSON.parse(JSON.stringify(this.users)));
         })
         .catch((error) => {
           console.log(error);
