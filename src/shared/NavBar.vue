@@ -25,14 +25,23 @@
             class="nav-btn"
             label="Sign In"
           />
-          <q-btn
-            v-if="loggedInUser"
-            no-caps
-            flat
-            @click="doLogout()"
-            class="nav-btn"
-            label="Logout"
-          />
+
+          <q-btn v-if="loggedInUser" no-caps flat class="nav-btn">
+            My Profile
+            <q-menu auto-close>
+              <q-list
+                style="min-width: 100px; height: calc(100% - 0); margin-top: 0"
+              >
+                <q-item to="/profile" exact clickable v-ripple>
+                  <q-item-section> Profile </q-item-section>
+                </q-item>
+
+                <q-item @click="doLogout()" exact clickable v-ripple>
+                  <q-item-section> Sign Out </q-item-section>
+                </q-item>
+              </q-list>
+            </q-menu>
+          </q-btn>
         </div>
 
         <q-btn
@@ -56,12 +65,38 @@
                 <q-item-section> FAQs </q-item-section>
               </q-item>
 
-              <q-item to="/register" exact clickable v-ripple>
+              <q-item
+                v-if="!loggedInUser"
+                to="/register"
+                exact
+                clickable
+                v-ripple
+              >
                 <q-item-section> Register </q-item-section>
               </q-item>
 
-              <q-item to="/login" exact clickable v-ripple>
+              <q-item v-if="!loggedInUser" to="/login" exact clickable v-ripple>
                 <q-item-section> Sign In </q-item-section>
+              </q-item>
+
+              <q-item
+                v-if="loggedInUser"
+                to="/profile"
+                exact
+                clickable
+                v-ripple
+              >
+                <q-item-section> My Profile </q-item-section>
+              </q-item>
+
+              <q-item
+                v-if="loggedInUser"
+                @click="doLogout()"
+                exact
+                clickable
+                v-ripple
+              >
+                <q-item-section> Sign Out </q-item-section>
               </q-item>
             </q-list>
           </q-menu>
