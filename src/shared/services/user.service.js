@@ -7,6 +7,12 @@ export const getUsers = async () => {
   return response.data;
 };
 
+// Get a user
+export const getUser = async (id) => {
+  const response = await axios.get(`${BACKEND_API}/api/v1/users/${id}`);
+  return response.data;
+};
+
 // Location Service
 export const getLocation = async () => {
   const response = await axios.get(`https://api.db-ip.com/v2/free/self`);
