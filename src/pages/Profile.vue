@@ -149,4 +149,10 @@ export default defineComponent({
   max-width: 960px;
   margin: 0 auto;
 }
+
+@media only screen and (max-width: 575px) {
+  .loading-state {
+    text-align: center;
+  }
+}
 </style>
