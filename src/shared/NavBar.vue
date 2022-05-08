@@ -149,7 +149,7 @@ export default defineComponent({
 }
 .toolbar {
   width: 100%;
-  max-width: 960px;
+  max-width: 1024px;
   margin: 0 auto;
 }
 
