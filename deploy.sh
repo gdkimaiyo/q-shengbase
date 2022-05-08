@@ -22,6 +22,6 @@ git commit -m 'initiate deployment'
 # git push -f git@github.com:<USERNAME>/<USERNAME>.github.io.git main
 
 # if you are deploying to https://<USERNAME>.github.io/<REPO>
-git push -f git@github.com:gdkimaiyo/q-shengbase.git master:gh-pages
+git push -f git@github.com:gdkimaiyo/shengbase.git master:gh-pages
 
 cd -
