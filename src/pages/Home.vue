@@ -1,5 +1,5 @@
 <template>
-  <q-page class="column q-pb-xl">
+  <q-page id="home-page" class="column q-pb-xl">
     <AfterNavBar
       :show_paths="false"
       desc="Add or find trending sheng words in our ShengBase dictionary"
@@ -28,13 +28,56 @@
         </div>
       </div>
 
-      <div class="words q-mt-lg">
-        <p>
-          Lorem ipsum dolor, sit amet consectetur adipisicing elit. Eaque quod
-          et incidunt maiores animi. Veritatis magnam fuga ducimus laudantium!
-          Ad tempora inventore maiores a ullam necessitatibus cupiditate earum
-          quis odit!
-        </p>
+      <div class="row content q-mt-lg">
+        <div class="col-xs-12 col-sm-6 col-md-8">
+          <div class="words q-mr-md q-pa-md">
+            <div class="text-h5 text-primary q-mb-sm q-ml-sm">Words</div>
+            <q-list bordered separator>
+              <q-item clickable v-ripple>
+                <q-item-section>
+                  <q-item-label>
+                    <h6 class="q-my-none" style="color: #42b983">Nare</h6>
+                  </q-item-label>
+                  <q-item-label>
+                    Lorem ipsum dolor sit amet consectetur adipisicing elit.
+                    Voluptatum velit veniam obcaecati vero doloribus repellat
+                    nulla inventore dolore nihil. In qui veniam exercitationem
+                    placeat reiciendis! Nulla minima molestiae iure aperiam.
+                  </q-item-label>
+                  <q-item-label caption>Like</q-item-label>
+                </q-item-section>
+              </q-item>
+
+              <q-item clickable v-ripple>
+                <q-item-section>
+                  <q-item-label>
+                    <h6 class="q-my-none" style="color: #42b983">Stima</h6>
+                  </q-item-label>
+                  <q-item-label>
+                    Lorem ipsum dolor sit amet consectetur adipisicing elit.
+                  </q-item-label>
+                  <q-item-label caption>Like</q-item-label>
+                </q-item-section>
+              </q-item>
+
+              <q-item clickable v-ripple>
+                <q-item-section>
+                  <q-item-label>
+                    <h6 class="q-my-none" style="color: #42b983">Nare</h6>
+                  </q-item-label>
+                  <q-item-label>
+                    Lorem ipsum dolor sit amet consectetur adipisicing elit.
+                    Voluptatum velit veniam obcaecati vero doloribus repellat
+                  </q-item-label>
+                  <q-item-label caption>Like</q-item-label>
+                </q-item-section>
+              </q-item>
+            </q-list>
+          </div>
+        </div>
+        <div class="col-xs-12 col-sm-6 col-md-4">
+          <div class="trends q-pa-md">Trends</div>
+        </div>
       </div>
     </div>
   </q-page>
@@ -67,30 +110,30 @@ export default defineComponent({
   },
 
   methods: {
-    async getVisitorIP() {
-      getLocation()
-        .then((response) => {
-          this.location = response;
+    // async getVisitorIP() {
+    //   getLocation()
+    //     .then((response) => {
+    //       this.location = response;
 
-          const payload = {
-            city: this.location?.city,
-            country: this.location?.countryName,
-            countryCode: this.location?.countryCode,
-            ipAddress: this.location?.ipAddress,
-          };
+    //       const payload = {
+    //         city: this.location?.city,
+    //         country: this.location?.countryName,
+    //         countryCode: this.location?.countryCode,
+    //         ipAddress: this.location?.ipAddress,
+    //       };
 
-          // saveLog(payload)
-          //   .then((response) => {
-          //     console.log(response);
-          //   })
-          //   .catch((error) => {
-          //     console.log(error);
-          //   });
-        })
-        .catch((error) => {
-          console.log(error);
-        });
-    },
+    //       saveLog(payload)
+    //         .then((response) => {
+    //           console.log(response);
+    //         })
+    //         .catch((error) => {
+    //           console.log(error);
+    //         });
+    //     })
+    //     .catch((error) => {
+    //       console.log(error);
+    //     });
+    // },
 
     getAllUsers() {
       this.isLoading = true;
@@ -113,16 +156,21 @@ export default defineComponent({
   },
 
   mounted() {
-    this.getVisitorIP();
+    // this.getVisitorIP();
     this.getAllUsers();
   },
 });
 </script>
 
 <style lang="scss" scoped>
+#home-page {
+  font-family: Avenir, Helvetica, Arial, sans-serif;
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+}
 .main-page {
   width: 100%;
-  max-width: 960px;
+  max-width: 1024px;
   margin: 0 auto;
 }
 .stats {
