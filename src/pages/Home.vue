@@ -29,54 +29,12 @@
       </div>
 
       <div class="row content q-mt-lg">
-        <div class="col-xs-12 col-sm-6 col-md-8">
-          <div class="words q-mr-md q-pa-md">
-            <div class="text-h5 text-primary q-mb-sm q-ml-sm">Words</div>
-            <q-list bordered separator>
-              <q-item clickable v-ripple>
-                <q-item-section>
-                  <q-item-label>
-                    <h6 class="q-my-none" style="color: #42b983">Nare</h6>
-                  </q-item-label>
-                  <q-item-label>
-                    Lorem ipsum dolor sit amet consectetur adipisicing elit.
-                    Voluptatum velit veniam obcaecati vero doloribus repellat
-                    nulla inventore dolore nihil. In qui veniam exercitationem
-                    placeat reiciendis! Nulla minima molestiae iure aperiam.
-                  </q-item-label>
-                  <q-item-label caption>Like</q-item-label>
-                </q-item-section>
-              </q-item>
-
-              <q-item clickable v-ripple>
-                <q-item-section>
-                  <q-item-label>
-                    <h6 class="q-my-none" style="color: #42b983">Stima</h6>
-                  </q-item-label>
-                  <q-item-label>
-                    Lorem ipsum dolor sit amet consectetur adipisicing elit.
-                  </q-item-label>
-                  <q-item-label caption>Like</q-item-label>
-                </q-item-section>
-              </q-item>
-
-              <q-item clickable v-ripple>
-                <q-item-section>
-                  <q-item-label>
-                    <h6 class="q-my-none" style="color: #42b983">Nare</h6>
-                  </q-item-label>
-                  <q-item-label>
-                    Lorem ipsum dolor sit amet consectetur adipisicing elit.
-                    Voluptatum velit veniam obcaecati vero doloribus repellat
-                  </q-item-label>
-                  <q-item-label caption>Like</q-item-label>
-                </q-item-section>
-              </q-item>
-            </q-list>
-          </div>
+        <div class="col-xs-12 col-sm-8 col-md-8">
+          <WordsList />
         </div>
-        <div class="col-xs-12 col-sm-6 col-md-4">
-          <div class="trends q-pa-md">Trends</div>
+        <div class="col-xs-12 col-sm-4 col-md-4">
+          <div class="q-pa-md"></div>
+          <TrendsList />
         </div>
       </div>
     </div>
@@ -87,6 +45,9 @@
 import { defineComponent, ref } from "vue";
 import { Notify } from "quasar";
 import AfterNavBar from "../components/AfterNavBar.vue";
+import WordsList from "../components/WordsList.vue";
+import TrendsList from "../components/TrendsList.vue";
+
 import {
   getLocation,
   getUsers,
@@ -99,6 +60,8 @@ export default defineComponent({
 
   components: {
     AfterNavBar,
+    WordsList,
+    TrendsList,
   },
 
   setup() {
@@ -141,7 +104,6 @@ export default defineComponent({
         .then((response) => {
           this.users = response.data;
           this.isLoading = false;
-          console.log(JSON.parse(JSON.stringify(this.users)));
         })
         .catch((error) => {
           console.log(error);
