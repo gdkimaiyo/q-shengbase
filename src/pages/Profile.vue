@@ -72,7 +72,6 @@ export default defineComponent({
       paths: ref(["Home", "Profile"]),
 
       isLoading: ref(false),
-      id: ref(undefined),
       user: ref(null),
     };
   },
@@ -92,6 +91,9 @@ export default defineComponent({
     async getAUser() {
       this.isLoading = true;
       const user = JSON.parse(localStorage.getItem("sb_user"));
+      if (user === null) {
+        return;
+      }
       await getUser(user._id)
         .then((response) => {
           this.user = response.data;
