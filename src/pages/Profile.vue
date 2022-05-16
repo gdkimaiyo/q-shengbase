@@ -57,6 +57,7 @@ import { defineComponent, ref } from "vue";
 import { date, Notify } from "quasar";
 import AfterNavBar from "../components/AfterNavBar.vue";
 import { getUser } from "../shared/services/user.service";
+import { isVerified } from "../utils/helpers.js";
 
 export default defineComponent({
   // eslint-disable-next-line vue/multi-word-component-names
@@ -73,6 +74,7 @@ export default defineComponent({
 
       isLoading: ref(false),
       user: ref(null),
+      isVerified: ref(false),
     };
   },
 
@@ -83,15 +85,19 @@ export default defineComponent({
   },
   created() {
     if (!this.loggedIn) {
-      this.$router.push("/");
+      this.$router.push("/login");
     }
   },
 
   methods: {
     async getAUser() {
       this.isLoading = true;
+
+      this.isVerified = await isVerified();
+
       const user = JSON.parse(localStorage.getItem("sb_user"));
-      if (user === null) {
+      if (user === null || this.isVerified === false) {
+        this.$router.push("/login");
         return;
       }
       await getUser(user._id)
@@ -100,15 +106,14 @@ export default defineComponent({
           this.isLoading = false;
         })
         .catch((error) => {
-          console.log(error);
           if (error?.response?.status === 404) {
             this.$store.dispatch("auth/logout");
             Notify.create({
               type: "negative",
-              message: "Error! Unable to load profile.",
+              message: "Unable to load profile, please sign in again.",
               group: false,
             });
-            this.$router.push("/");
+            this.$router.push("/login");
           } else {
             Notify.create({
               type: "warning",

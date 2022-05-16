@@ -10,7 +10,7 @@
           <q-btn no-caps flat to="/about" class="nav-btn" label="About" />
           <q-btn no-caps flat to="/faqs" class="nav-btn" label="FAQs" />
           <q-btn
-            v-if="!loggedInUser"
+            v-if="!isAuthenticated"
             no-caps
             flat
             to="/register"
@@ -18,7 +18,7 @@
             label="Register"
           />
           <q-btn
-            v-if="!loggedInUser"
+            v-if="!isAuthenticated"
             no-caps
             flat
             to="/login"
@@ -26,7 +26,7 @@
             label="Sign In"
           />
 
-          <q-btn v-if="loggedInUser" no-caps flat class="nav-btn">
+          <q-btn v-if="isAuthenticated" no-caps flat class="nav-btn">
             My Profile
             <q-menu auto-close>
               <q-list
@@ -66,7 +66,7 @@
               </q-item>
 
               <q-item
-                v-if="!loggedInUser"
+                v-if="!isAuthenticated"
                 to="/register"
                 exact
                 clickable
@@ -75,12 +75,18 @@
                 <q-item-section> Register </q-item-section>
               </q-item>
 
-              <q-item v-if="!loggedInUser" to="/login" exact clickable v-ripple>
+              <q-item
+                v-if="!isAuthenticated"
+                to="/login"
+                exact
+                clickable
+                v-ripple
+              >
                 <q-item-section> Sign In </q-item-section>
               </q-item>
 
               <q-item
-                v-if="loggedInUser"
+                v-if="isAuthenticated"
                 to="/profile"
                 exact
                 clickable
@@ -90,7 +96,7 @@
               </q-item>
 
               <q-item
-                v-if="loggedInUser"
+                v-if="isAuthenticated"
                 @click="doLogout()"
                 exact
                 clickable
@@ -110,19 +116,20 @@
 import { defineComponent, ref } from "vue";
 import { Notify } from "quasar";
 
+import { isVerified } from "../utils/helpers.js";
+
 export default defineComponent({
   name: "NavBar",
 
   setup() {
     return {
       dropDownMenu: ref(false),
+      isAuthenticated: ref(false),
     };
   },
 
-  computed: {
-    loggedInUser() {
-      return this.$store.state.auth.user;
-    },
+  async created() {
+    this.isAuthenticated = await isVerified();
   },
 
   methods: {
