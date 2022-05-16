@@ -15,6 +15,12 @@ class AuthService {
     return response.data;
   }
 
+  // Verify User Token if valid
+  async verifyUser(token) {
+    const response = await axios.post(`${BACKEND_API}/api/v1/verify`, token);
+    return response.data;
+  }
+
   logout() {
     localStorage.removeItem("sb_user");
   }

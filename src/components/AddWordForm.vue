@@ -172,13 +172,21 @@ export default defineComponent({
           this.$emit("wordAdded", true);
         })
         .catch((error) => {
-          console.log(error);
+          if (error?.response?.status === 409) {
+            Notify.create({
+              type: "info",
+              color: "primary",
+              message: "Word has already been added",
+              group: false,
+            });
+          } else {
+            Notify.create({
+              type: "negative",
+              message: "Error! Something went wrong while adding word.",
+              group: false,
+            });
+          }
           this.isLoading = false;
-          Notify.create({
-            type: "negative",
-            message: "Error! Something went wrong while adding word.",
-            group: false,
-          });
         });
     },
   },

@@ -73,6 +73,8 @@ import { defineComponent, ref } from "vue";
 import { Notify } from "quasar";
 import AddWordForm from "./AddWordForm.vue";
 
+import { isVerified } from "../utils/helpers.js";
+
 export default defineComponent({
   name: "WordsList",
 
@@ -81,13 +83,14 @@ export default defineComponent({
   setup() {
     return {
       isOpen: ref(false),
+      isVerified: ref(false),
     };
   },
 
   methods: {
-    openFormDialog() {
-      const user = JSON.parse(localStorage.getItem("sb_user"));
-      if (user === null) {
+    async openFormDialog() {
+      this.isVerified = await isVerified();
+      if (this.isVerified === false) {
         Notify.create({
           type: "info",
           message: "Please sign in to be able to add a word.",

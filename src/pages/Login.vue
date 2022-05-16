@@ -40,12 +40,27 @@
 import { defineComponent, ref } from "vue";
 import LoginForm from "../components/LoginForm.vue";
 
+import { isVerified } from "../utils/helpers.js";
+
 export default defineComponent({
   // eslint-disable-next-line vue/multi-word-component-names
   name: "Login",
 
   components: {
     LoginForm,
+  },
+
+  setup() {
+    return {
+      isVerified: ref(false),
+    };
+  },
+
+  async created() {
+    this.isVerified = await isVerified();
+    if (this.isVerified === true) {
+      this.$router.push("/");
+    }
   },
 
   methods: {

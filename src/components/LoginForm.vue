@@ -58,17 +58,6 @@ export default defineComponent({
     };
   },
 
-  computed: {
-    loggedIn() {
-      return this.$store.state.auth.status.loggedIn;
-    },
-  },
-  created() {
-    if (this.loggedIn) {
-      this.$router.push("/");
-    }
-  },
-
   methods: {
     async onSubmit() {
       this.isLoading = true;
