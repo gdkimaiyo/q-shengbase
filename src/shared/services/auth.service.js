@@ -16,8 +16,8 @@ class AuthService {
   }
 
   // Verify User Token if valid
-  async verifyUser(token) {
-    const response = await axios.post(`${BACKEND_API}/api/v1/verify`, token);
+  async verifyUser(payload) {
+    const response = await axios.post(`${BACKEND_API}/api/v1/verify`, payload);
     return response.data;
   }
 
