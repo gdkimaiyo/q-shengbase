@@ -9,7 +9,7 @@ export const isVerified = async () => {
     return verified;
   }
 
-  await AuthService.verifyUser({ token: user?.token })
+  await AuthService.verifyUser({ token: user?.token, userId: user._id })
     .then((res) => {
       if (res.data === true) {
         verified = true;

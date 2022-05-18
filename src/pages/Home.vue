@@ -19,11 +19,11 @@
         <!-- Number of Words -->
         <div class="stats-card text-center q-pt-md">
           <span class="stat-title">Words </span><br />
-          <div v-if="isLoading" class="q-pt-sm">
+          <div v-if="isLoadingWords" class="q-pt-sm">
             <q-spinner-dots color="white" size="2em" />
           </div>
-          <div v-if="!isLoading && users !== null">
-            <span class="stat">12202</span>
+          <div v-if="!isLoadingWords && words !== null">
+            <span class="stat">{{ words.length }}</span>
           </div>
         </div>
       </div>
@@ -53,6 +53,7 @@ import {
   getUsers,
   saveLog,
 } from "../shared/services/user.service";
+import { getWords } from "../shared/services/word.service";
 
 export default defineComponent({
   // eslint-disable-next-line vue/multi-word-component-names
@@ -68,7 +69,9 @@ export default defineComponent({
     return {
       location: ref({}),
       isLoading: ref(false),
+      isLoadingWords: ref(false),
       users: ref(null),
+      words: ref(null),
     };
   },
 
@@ -115,11 +118,32 @@ export default defineComponent({
           });
         });
     },
+
+    getAllWords() {
+      this.isLoadingWords = true;
+      getWords()
+        .then((response) => {
+          this.words = response.data;
+          // console.log(JSON.parse(JSON.stringify(this.words)));
+          this.isLoadingWords = false;
+        })
+        .catch((error) => {
+          console.log(error);
+          this.isLoadingWords = false;
+          Notify.create({
+            type: "negative",
+            message:
+              "Error! Something went wrong. Unable to loads wheng words.",
+            group: false,
+          });
+        });
+    },
   },
 
   mounted() {
     // this.getVisitorIP();
     this.getAllUsers();
+    this.getAllWords();
   },
 });
 </script>

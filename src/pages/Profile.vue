@@ -97,6 +97,12 @@ export default defineComponent({
 
       const user = JSON.parse(localStorage.getItem("sb_user"));
       if (user === null || this.isVerified === false) {
+        Notify.create({
+          type: "info",
+          message: "Unable to load profile, please sign in.",
+          color: "primary",
+          group: false,
+        });
         this.$router.push("/login");
         return;
       }
@@ -110,7 +116,7 @@ export default defineComponent({
             this.$store.dispatch("auth/logout");
             Notify.create({
               type: "negative",
-              message: "Unable to load profile, please sign in again.",
+              message: "Unable to load profile, please sign in.",
               group: false,
             });
             this.$router.push("/login");
@@ -139,6 +145,7 @@ export default defineComponent({
       Notify.create({
         type: "info",
         message: "Update Profile coming soon...",
+        color: "primary",
         group: false,
       });
     },
