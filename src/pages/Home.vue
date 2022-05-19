@@ -33,7 +33,7 @@
           <WordsList />
         </div>
         <div class="col-xs-12 col-sm-4 col-md-4">
-          <div class="q-pa-md"></div>
+          <div class="q-pa-md q-mt-sm"></div>
           <TrendsList />
         </div>
       </div>
@@ -124,7 +124,6 @@ export default defineComponent({
       getWords()
         .then((response) => {
           this.words = response.data;
-          // console.log(JSON.parse(JSON.stringify(this.words)));
           this.isLoadingWords = false;
         })
         .catch((error) => {
