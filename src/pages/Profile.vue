@@ -134,7 +134,7 @@ export default defineComponent({
     },
 
     registerDate(timeStamp) {
-      return date.formatDate(new Date(timeStamp), "MMMM, DD YYYY");
+      return date.formatDate(new Date(timeStamp), "MMMM DD, YYYY");
     },
 
     registerTime(timeStamp) {
