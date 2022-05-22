@@ -16,6 +16,8 @@
           type="text"
           filled
           dense
+          :readonly="wordExists || checking"
+          @change="checkIfExists(word)"
           lazy-rules
           :rules="[
             (val) => (val && val.length > 0) || 'Please provide the sheng word',
@@ -29,12 +31,13 @@
           label="Sheng word meaning *"
           dense
           filled
+          :readonly="wordExists || checking"
           autogrow
           lazy-rules
           :rules="[
             (val) =>
               (val && val.length > 0) ||
-              'Please provide meaning the sheng word',
+              'Please provide meaning of the sheng word',
           ]"
         />
         <q-input
@@ -46,6 +49,7 @@
           dense
           filled
           autogrow
+          :readonly="wordExists || checking"
           lazy-rules
           :rules="[
             (val) =>
@@ -58,20 +62,28 @@
           v-model="meaning2"
           class="q-py-md"
           spellcheck="false"
-          label="Second meaning (Optional)"
+          :label="meaning2Label"
           dense
           filled
           autogrow
+          :readonly="checking"
+          lazy-rules
+          :rules="[
+            (val) => validateVal(val) || 'Please provide second meaning',
+          ]"
         />
         <q-input
           v-model="usage2"
           class="q-py-md"
           spellcheck="false"
-          label="Example usage (Optional)"
-          placeholder="e.g Tom alitoka nje ndio awashe nare"
+          :label="usage2Label"
+          placeholder="e.g Tom aliwasha nare darasani."
           dense
           filled
           autogrow
+          :readonly="checking"
+          lazy-rules
+          :rules="[(val) => validateVal(val) || 'Please provide example usage']"
         />
         <q-separator />
         <q-input
@@ -81,6 +93,7 @@
           label="Word Origin *"
           placeholder="e.g Nairobi"
           dense
+          :readonly="wordExists || checking"
           type="text"
           lazy-rules
           :rules="[
@@ -114,7 +127,7 @@
 <script>
 import { defineComponent, ref } from "vue";
 import { Notify } from "quasar";
-import { addNewWord } from "../shared/services/word.service";
+import { addNewWord, getWord, uWord } from "../shared/services/word.service";
 
 export default defineComponent({
   name: "AddWordForm",
@@ -124,6 +137,7 @@ export default defineComponent({
 
     return {
       word: ref(null),
+      wordId: ref(null), // If the word provided exists, get the word id
       origin: ref(null),
       meaning1: ref(null),
       usage1: ref(null),
@@ -132,6 +146,15 @@ export default defineComponent({
       isLoading: ref(false),
       author: ref(author),
       authorName: ref(`${author?.firstname} ${author?.lastname}`),
+
+      meaning2Label: ref("Second meaning (Optional)"),
+      usage2Label: ref("Example usage (Optional)"),
+
+      oldMeaning: ref(null),
+
+      wordExists: ref(false),
+      isSameCoAuthor: ref(false),
+      checking: ref(false),
     };
   },
 
@@ -153,41 +176,153 @@ export default defineComponent({
         });
       }
 
-      const payload = {
-        authorId: this.author._id,
-        word: this.word,
-        origin: this.origin,
-        author: `${this.author?.firstname} ${this.author?.lastname}`,
-        meaning: meaning,
-      };
+      if (this.wordExists === true) {
+        let payload = { wordId: this.wordId, meaning: [] };
+        if (this.isSameCoAuthor === true) {
+          payload.meaning = [
+            ...this.oldMeaning,
+            { meaning: this.meaning2, usage: this.usage2 },
+          ];
+        } else {
+          payload.meaning = [
+            ...this.oldMeaning,
+            {
+              meaning: this.meaning2,
+              usage: this.usage2,
+              coAuthorId: this.author._id,
+              coAuthor: `${this.author?.firstname} ${this.author?.lastname}`,
+            },
+          ];
+        }
 
-      await addNewWord(payload)
-        .then((res) => {
-          Notify.create({
-            type: "positive",
-            message: "Success! Word added successfully.",
-            group: false,
-          });
-          this.isLoading = false;
-          this.$emit("wordAdded", true);
-        })
-        .catch((error) => {
-          if (error?.response?.status === 409) {
+        // Update word by adding second meaning
+        await uWord(payload)
+          .then((res) => {
             Notify.create({
-              type: "info",
-              color: "primary",
-              message: "Word has already been added",
+              type: "positive",
+              message: "Success! Word updated successfully.",
               group: false,
             });
-          } else {
+            this.isLoading = false;
+            this.$emit("wordAdded", true);
+            this.$router.push("/");
+          })
+          .catch((error) => {
+            Notify.create({
+              type: "negative",
+              message: "Something went wrong while updating word.",
+              group: false,
+            });
+            this.isLoading = false;
+          });
+      } else {
+        const payload = {
+          authorId: this.author._id,
+          word: this.word,
+          origin: this.origin,
+          author: `${this.author?.firstname} ${this.author?.lastname}`,
+          meaning: meaning,
+        };
+
+        await addNewWord(payload)
+          .then((res) => {
+            Notify.create({
+              type: "positive",
+              message: "Success! Word added successfully.",
+              group: false,
+            });
+            this.isLoading = false;
+            this.$emit("wordAdded", true);
+            this.$router.push("/");
+          })
+          .catch((error) => {
             Notify.create({
               type: "negative",
               message: "Error! Something went wrong while adding word.",
               group: false,
             });
-          }
-          this.isLoading = false;
+            this.isLoading = false;
+          });
+      }
+    },
+
+    async checkIfExists(word) {
+      if (word?.length > 0) {
+        this.checking = true;
+
+        const notif = Notify.create({
+          spinner: true,
+          color: "primary",
+          message: "Checking if word exists",
+          group: false,
         });
+
+        notif({ timeout: 0 });
+
+        await getWord(word)
+          .then((res) => {
+            this.checking = false;
+            if (!this.checking) {
+              setTimeout(() => {
+                if (res.data?.length > 0) {
+                  this.wordExists = true;
+                  this.updateWord(res.data);
+                  notif({
+                    spinner: false,
+                    icon: "check",
+                    color: "primary",
+                    message: `Check complete. '${this.word}' already exists. Please add second meaning.`,
+                    timeout: 3000,
+                  });
+                } else {
+                  notif({
+                    spinner: false,
+                    icon: "check",
+                    color: "primary",
+                    message: "Check complete. Word can be added.",
+                    timeout: 2500,
+                  });
+                }
+              }, 1000);
+            }
+          })
+          .catch((error) => {
+            Notify.create({
+              type: "warning",
+              message: "Something went wrong or lost internet connection.",
+              group: false,
+            });
+            this.checking = false;
+          });
+      }
+    },
+
+    validateVal(val) {
+      if (this.wordExists === false) {
+        return true;
+      } else {
+        if (val && val.length > 0) {
+          return true;
+        } else {
+          return false;
+        }
+      }
+    },
+
+    updateWord(data) {
+      this.meaning2Label = "Second meaning *";
+      this.usage2Label = "Example usage *";
+      const existingWord = data[0];
+      this.oldMeaning = existingWord?.meaning;
+      this.meaning1 = existingWord?.meaning[0]?.meaning;
+      this.usage1 = existingWord?.meaning[0]?.usage;
+      this.origin = existingWord?.origin;
+      this.word = existingWord?.word;
+      if (existingWord.authorId === this.author._id) {
+        this.isSameCoAuthor = true;
+      }
+      this.authorName = existingWord?.author;
+      this.wordId = existingWord?._id;
     },
   },
 });

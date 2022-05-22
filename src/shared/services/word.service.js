@@ -9,6 +9,21 @@ export const getWords = async () => {
 
 // Add a word
 export const addNewWord = async (data) => {
-  const response = await axios.post(`${BACKEND_API}/api/v1/addword`, data);
+  const response = await axios.post(`${BACKEND_API}/api/v1/words`, data);
+  return response.data;
+};
+
+// Add a word
+export const uWord = async (data) => {
+  const response = await axios.put(
+    `${BACKEND_API}/api/v1/words/${data.wordId}`,
+    data
+  );
+  return response.data;
+};
+
+// Search if a word exists
+export const getWord = async (word) => {
+  const response = await axios.get(`${BACKEND_API}/api/v1/fetchword/${word}`);
   return response.data;
 };

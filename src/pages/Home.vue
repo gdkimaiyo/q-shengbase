@@ -76,30 +76,24 @@ export default defineComponent({
   },
 
   methods: {
-    // async getVisitorIP() {
-    //   getLocation()
-    //     .then((response) => {
-    //       this.location = response;
+    async getVisitorIP() {
+      getLocation()
+        .then((response) => {
+          this.location = response;
 
-    //       const payload = {
-    //         city: this.location?.city,
-    //         country: this.location?.countryName,
-    //         countryCode: this.location?.countryCode,
-    //         ipAddress: this.location?.ipAddress,
-    //       };
+          const payload = {
+            city: this.location?.city,
+            country: this.location?.countryName,
+            countryCode: this.location?.countryCode,
+            ipAddress: this.location?.ipAddress,
+          };
 
-    //       saveLog(payload)
-    //         .then((response) => {
-    //           console.log(response);
-    //         })
-    //         .catch((error) => {
-    //           console.log(error);
-    //         });
-    //     })
-    //     .catch((error) => {
-    //       console.log(error);
-    //     });
-    // },
+          saveLog(payload)
+            .then((response) => {})
+            .catch((error) => {});
+        })
+        .catch((error) => {});
+    },
 
     getAllUsers() {
       this.isLoading = true;
@@ -109,12 +103,13 @@ export default defineComponent({
           this.isLoading = false;
         })
         .catch((error) => {
-          console.log(error);
+          this.users = [];
           this.isLoading = false;
           Notify.create({
             type: "negative",
-            message: "Error! Something went wrong or no internet connection.",
+            message: "CONNECTION REFUSED.",
             group: false,
+            timeout: 5000,
           });
         });
     },
@@ -127,20 +122,14 @@ export default defineComponent({
           this.isLoadingWords = false;
         })
         .catch((error) => {
-          console.log(error);
+          this.words = [];
           this.isLoadingWords = false;
-          Notify.create({
-            type: "negative",
-            message:
-              "Error! Something went wrong. Unable to loads wheng words.",
-            group: false,
-          });
         });
     },
   },
 
   mounted() {
-    // this.getVisitorIP();
+    this.getVisitorIP();
     this.getAllUsers();
     this.getAllWords();
   },

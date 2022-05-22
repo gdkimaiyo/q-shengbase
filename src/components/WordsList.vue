@@ -195,28 +195,25 @@ export default defineComponent({
           this.isLoading = false;
         })
         .catch((error) => {
-          console.log(error);
           this.isLoading = false;
+          this.words = [];
           Notify.create({
-            type: "negative",
-            message:
-              "Error! Something went wrong. Unable to loads wheng words.",
+            type: "info",
+            color: "primary",
+            message: "Unable to loads wheng words.",
             group: false,
+            timeout: 5000,
           });
         });
     },
 
-    wordDetails(wordId) {
-      console.log(wordId);
-    },
+    wordDetails(wordId) {},
 
     like(wordId) {
-      console.log(wordId);
       console.log("LIKE");
     },
 
     dislike(wordId) {
-      console.log(wordId);
       console.log("DISLIKE");
     },
 

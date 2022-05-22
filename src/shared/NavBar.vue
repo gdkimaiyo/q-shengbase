@@ -144,7 +144,7 @@ export default defineComponent({
         message: "Success! Logout successful.",
         group: false,
       });
-      this.$router.push("/");
+      this.$router.push("/login");
     },
   },
 });
