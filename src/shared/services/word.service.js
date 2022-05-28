@@ -27,3 +27,9 @@ export const getWord = async (word) => {
   const response = await axios.get(`${BACKEND_API}/api/v1/fetchword/${word}`);
   return response.data;
 };
+
+// Search if a word exists
+export const searchWord = async (word) => {
+  const response = await axios.get(`${BACKEND_API}/api/v1/wordsearch/${word}`);
+  return response.data;
+};

@@ -38,7 +38,7 @@ export default defineComponent({
 
   setup() {
     return {
-      src: ref("board.jpg"),
+      src: ref("black-board.jpg"),
       paths: ref(["Home", "About"]),
     };
   },
