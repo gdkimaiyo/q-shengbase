@@ -56,7 +56,16 @@ export default defineComponent({
     };
   },
 
+  computed: {
+    loggedIn() {
+      return this.$store.state.auth.status.loggedIn;
+    },
+  },
+
   async created() {
+    if (this.loggedIn) {
+      this.$router.push("/");
+    }
     this.isVerified = await isVerified();
     if (this.isVerified === true) {
       this.$router.push("/");
