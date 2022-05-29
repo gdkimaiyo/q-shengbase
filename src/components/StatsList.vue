@@ -34,7 +34,7 @@ import {
 import { getWords } from "../shared/services/word.service";
 
 export default defineComponent({
-  name: "TrendsList",
+  name: "StatsList",
 
   setup() {
     return {
