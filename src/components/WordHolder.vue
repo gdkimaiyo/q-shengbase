@@ -90,7 +90,7 @@
 </template>
 
 <script>
-import { defineComponent, ref } from "vue";
+import { defineComponent } from "vue";
 import { date } from "quasar";
 
 export default defineComponent({
@@ -152,7 +152,6 @@ export default defineComponent({
 }
 
 .like-btn-2 {
-  // color: #42b983;
   color: green;
 }
 
