@@ -1,32 +1,35 @@
 <template>
   <div class="words q-mr-md q-pa-md">
     <div class="row q-mb-sm q-ml-sm">
-      <div class="col text-right">
+      <div class="col-8">
         <q-input
           rounded
           outlined
           dense
           v-model="searchTerm"
           placeholder="Word search"
-          class="search-input q-mr-sm"
-          :class="{ 'toggle-input': toggleInput }"
+          class="q-mr-sm"
           @keyup.enter="startSearch"
         >
-          <template v-slot:append>
+          <template v-slot:prepend>
             <q-btn round dense flat icon="search" @click="startSearch" />
           </template>
+          <template v-slot:append>
+            <q-btn
+              v-if="searchTerm !== ''"
+              round
+              dense
+              flat
+              icon="close"
+              @click="clearSearch"
+            />
+          </template>
         </q-input>
-        <q-btn flat round color="primary" @click="toggleSearch">
-          <q-icon v-if="!toggleInput" name="fas fa-magnifying-glass" />
-          <q-icon
-            v-if="toggleInput"
-            class="cancel-icon"
-            size="28px"
-            name="close"
-          />
-        </q-btn>
+      </div>
+      <div class="col-4 text-right">
         <q-btn
           no-caps
+          rounded
           unelevated
           color="primary"
           class="gt-sm q-ml-md"
@@ -52,22 +55,28 @@
         </q-dialog>
       </div>
     </div>
-    <h6 class="q-my-lg q-ml-sm" style="color: #6c757d" v-if="beginSearch">
-      <span v-if="inProgress">
-        Searching for <b class="q-pr-sm">{{ searchPhrase }}</b>
-        <q-spinner-dots size="2em" />
-      </span>
-      <span v-if="!inProgress">
-        Showing results for <b>{{ searchPhrase }}</b>
-      </span>
-    </h6>
+
     <q-list class="q-mb-xl" bordered separator v-if="beginSearch">
-      <q-item clickable v-ripple v-if="inProgress">
-        <q-item-section class="q-my-xl">
-          <q-item-label class="text-center">
-            <q-spinner style="color: #6c757d" size="2.5em" /> <br />
-            <h6 class="q-my-none">
-              <b>Search in progress...</b>
+      <q-item v-if="inProgress">
+        <q-item-section>
+          <q-item-label>
+            <h6 class="q-mt-md q-mb-sm text-primary">
+              <span style="color: rgba(12, 69, 176, 0.87)">Searching for </span>
+              <b class="q-pr-sm">{{ searchPhrase }}</b>
+              <q-spinner-dots size="1.5em" />
+            </h6>
+          </q-item-label>
+        </q-item-section>
+      </q-item>
+
+      <q-item v-if="!inProgress && results?.length > 0">
+        <q-item-section>
+          <q-item-label>
+            <h6 class="q-mt-md q-mb-sm text-primary">
+              <span style="color: rgba(12, 69, 176, 0.87)">
+                Showing results for
+              </span>
+              <b>{{ searchPhrase }}</b>
             </h6>
           </q-item-label>
         </q-item-section>
@@ -151,7 +160,6 @@ export default defineComponent({
       results: ref(null),
       searchTerm: ref(""),
       searchPhrase: ref(null),
-      toggleInput: ref(false),
     };
   },
 
@@ -210,8 +218,8 @@ export default defineComponent({
         });
     },
 
-    toggleSearch() {
-      this.toggleInput = !this.toggleInput;
+    clearSearch() {
+      this.searchTerm = "";
       this.beginSearch = false;
     },
 
