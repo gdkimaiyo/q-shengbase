@@ -209,9 +209,8 @@ export default defineComponent({
           this.isLoading = false;
           this.words = [];
           Notify.create({
-            type: "info",
-            color: "primary",
-            message: "Unable to loads wheng words.",
+            type: "negative",
+            message: "CONNECTION REFUSED.",
             group: false,
             timeout: 5000,
           });
