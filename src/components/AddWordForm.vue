@@ -110,7 +110,7 @@
           dense
           readonly
         />
-        <div class="q-mt-md">
+        <div class="q-mt-md q-mb-lg">
           <q-btn no-caps :loading="isLoading" type="submit" color="primary">
             Add Word
             <template v-slot:loading>

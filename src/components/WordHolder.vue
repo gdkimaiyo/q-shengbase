@@ -110,6 +110,10 @@ export default defineComponent({
 
     like(wordId) {
       console.log("LIKE", wordId);
+
+      const payload = {
+        like: true,
+      };
     },
 
     dislike(wordId) {
