@@ -92,7 +92,7 @@ export default defineComponent({
               type: "negative",
               message: error?.response?.data?.message
                 ? error.response.data.message
-                : "Something went wrong while registering.",
+                : "Something went wrong while signing in.",
               group: false,
             });
           }
