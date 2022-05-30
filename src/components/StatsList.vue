@@ -25,7 +25,6 @@
 
 <script>
 import { defineComponent, ref } from "vue";
-import { Notify } from "quasar";
 import {
   saveLog,
   getUsers,
@@ -76,12 +75,6 @@ export default defineComponent({
         .catch((error) => {
           this.users = [];
           this.isLoading = false;
-          Notify.create({
-            type: "negative",
-            message: "CONNECTION REFUSED.",
-            group: false,
-            timeout: 5000,
-          });
         });
     },
 
@@ -100,7 +93,7 @@ export default defineComponent({
   },
 
   mounted() {
-    this.getVisitorIP();
+    // this.getVisitorIP();
     this.getAllUsers();
     this.getAllWords();
   },
