@@ -13,7 +13,7 @@ export const addNewWord = async (data) => {
   return response.data;
 };
 
-// Add a word
+// Update a word
 export const uWord = async (data) => {
   const response = await axios.put(
     `${BACKEND_API}/api/v1/words/${data.wordId}`,
@@ -31,5 +31,14 @@ export const getWord = async (word) => {
 // Search if a word exists
 export const searchWord = async (word) => {
   const response = await axios.get(`${BACKEND_API}/api/v1/wordsearch/${word}`);
+  return response.data;
+};
+
+// Like or Unlike a word
+export const likeWord = async (data) => {
+  const response = await axios.put(
+    `${BACKEND_API}/api/v1/words/like/${data.wordId}`,
+    data
+  );
   return response.data;
 };

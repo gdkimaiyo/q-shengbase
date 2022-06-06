@@ -90,7 +90,10 @@
             </h4>
             <p class="q-my-none" style="color: #6c757d">
               Sorry, but the word <b>{{ searchPhrase }}</b> was not found in the
-              <b>ShengBase</b> dictionary. Please add it here
+              <b>ShengBase</b> dictionary. Please add it
+              <a @click="openFormDialog" class="text-primary">
+                here <q-icon name="fas fa-arrow-right-long" color="primary" />
+              </a>
             </p>
           </q-item-label>
         </q-item-section>
