@@ -67,22 +67,34 @@
             round
             class="like-btn"
             :class="{ 'like-btn-2': isSearchResult }"
-            @click.stop="like(word._id)"
+            @click.stop="likeUnlike(word._id, true)"
+            :disabled="likePending || unlikePending"
           >
             <q-icon name="fas fa-thumbs-up" />
           </q-btn>
-          <span>{{ 1233 }}</span>
+          <span v-if="!likePending">{{ 1233 }}</span>
+          <q-spinner-dots
+            v-if="likePending && wId === word._id"
+            color="primary"
+            size="2em"
+          />
         </span>
         <span class="dislikes">
           <q-btn
             flat
             round
             class="q-ml-sm dislike-btn"
-            @click.stop="dislike(word._id)"
+            @click.stop="likeUnlike(word._id, false)"
+            :disabled="likePending || unlikePending"
           >
             <q-icon name="fas fa-thumbs-down flip-horizontal" />
           </q-btn>
-          <span>{{ 122 }}</span>
+          <span v-if="!unlikePending">{{ 122 }}</span>
+          <q-spinner-dots
+            v-if="unlikePending && wId === word._id"
+            color="primary"
+            size="2em"
+          />
         </span>
       </q-item-label>
     </q-item-section>
@@ -90,8 +102,12 @@
 </template>
 
 <script>
-import { defineComponent } from "vue";
+import { defineComponent, ref } from "vue";
+import { Notify } from "quasar";
 import { date } from "quasar";
+
+import { likeWord } from "../shared/services/word.service";
+import { isVerified } from "../utils/helpers.js";
 
 export default defineComponent({
   name: "WordHolder",
@@ -105,19 +121,90 @@ export default defineComponent({
     },
   },
 
+  setup() {
+    return {
+      wId: ref(null), // Liked or unliked word id
+      isVerified: ref(false),
+      likePending: ref(false),
+      unlikePending: ref(false),
+    };
+  },
+
   methods: {
     wordDetails(wordId) {},
 
-    like(wordId) {
-      console.log("LIKE", wordId);
+    async likeUnlike(wordId, like) {
+      if (like) {
+        console.log("LIKE", wordId);
+      } else {
+        console.log("DISLIKE", wordId);
+      }
+
+      this.wId = wordId;
+      this.likePending = like ? true : false;
+      this.unlikePending = like ? false : true;
+
+      let i_txt = like ? "like" : "unlike";
+
+      this.isVerified = await isVerified();
+      if (this.isVerified === false) {
+        Notify.create({
+          type: "info",
+          message: `Please sign in to be able to ${i_txt} a word.`,
+          color: "primary",
+          group: false,
+          actions: [
+            {
+              label: "Sign In",
+              color: "yellow",
+              handler: () => {
+                this.$router.push("/login");
+              },
+            },
+            {
+              label: "Dismiss",
+              color: "white",
+              handler: () => {},
+            },
+          ],
+        });
+        return;
+      }
+
+      const user = JSON.parse(localStorage.getItem("sb_user"));
 
       const payload = {
-        like: true,
+        like: like ? true : false,
+        userId: user._id,
+        wordId: wordId,
       };
-    },
 
-    dislike(wordId) {
-      console.log("DISLIKE", wordId);
+      console.log(payload);
+      // setTimeout(() => {
+      //   this.likePending = false;
+      //   this.unlikePending = false;
+      // }, 3000);
+      // return;
+      await likeWord(payload)
+        .then((res) => {
+          console.log(res.data);
+          Notify.create({
+            type: "positive",
+            message: "Success!",
+            group: false,
+          });
+          this.likePending = false;
+          this.unlikePending = false;
+        })
+        .catch((error) => {
+          Notify.create({
+            type: "negative",
+            message: "Something went wrong while updating likes.",
+            group: false,
+          });
+          this.likePending = false;
+          this.unlikePending = false;
+        });
     },
 
     addedDate(timeStamp) {
