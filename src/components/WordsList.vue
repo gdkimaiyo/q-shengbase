@@ -205,6 +205,20 @@ export default defineComponent({
       getWords()
         .then((response) => {
           this.words = response.data;
+
+          const user = JSON.parse(localStorage.getItem("sb_user"));
+          if (user !== null) {
+            this.words.forEach((word) => {
+              let liked = word.likes.likes?.includes(user._id);
+              let disliked = word.likes.dislikes?.includes(user._id);
+              if (liked === true) {
+                word.liked = true;
+              }
+              if (disliked === true) {
+                word.disliked = true;
+              }
+            });
+          }
           // console.log(JSON.parse(JSON.stringify(this.words)));
           this.isLoading = false;
         })
@@ -233,6 +247,20 @@ export default defineComponent({
         searchWord(this.searchTerm)
           .then((response) => {
             this.results = response.data;
+
+            const user = JSON.parse(localStorage.getItem("sb_user"));
+            if (user !== null) {
+              this.results.forEach((word) => {
+                let liked = word.likes.likes?.includes(user._id);
+                let disliked = word.likes.dislikes?.includes(user._id);
+                if (liked === true) {
+                  word.liked = true;
+                }
+                if (disliked === true) {
+                  word.disliked = true;
+                }
+              });
+            }
             this.inProgress = false;
           })
           .catch((error) => {
