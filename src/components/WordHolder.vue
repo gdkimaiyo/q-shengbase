@@ -66,35 +66,66 @@
             flat
             round
             class="like-btn"
-            :class="{ 'like-btn-2': isSearchResult }"
-            @click.stop="likeUnlike(word._id, true)"
+            :class="{
+              'dislike-btn': isSearchResult,
+              'dislike-btn-2': isSearchResult && word?.liked,
+              'dislike-btn-3': isSearchResult && liked && wId === word._id,
+              'like-btn-2': word?.liked,
+              'like-btn-3': liked && wId === word._id,
+            }"
+            @click.stop="likeUnlike(word._id, true, word?.liked)"
             :disabled="likePending || unlikePending"
           >
             <q-icon name="fas fa-thumbs-up" />
           </q-btn>
-          <span v-if="!likePending">{{ 1233 }}</span>
-          <q-spinner-dots
-            v-if="likePending && wId === word._id"
-            color="primary"
-            size="2em"
-          />
+          <span v-if="likePending && wId === word._id">
+            <q-spinner-dots color="primary" size="2em" />
+          </span>
+          <span v-else>
+            <span
+              v-if="word?.likes?.likes?.length > 0"
+              :class="{
+                'dislike-btn': isSearchResult,
+                'dislike-btn-2': isSearchResult && word?.liked,
+                'dislike-btn-3': isSearchResult && liked && wId === word._id,
+                'liked-text': word?.liked,
+                'liked-text-1': liked && wId === word._id,
+              }"
+            >
+              {{ word?.likes?.likes?.length }}
+            </span>
+          </span>
         </span>
         <span class="dislikes">
           <q-btn
             flat
             round
             class="q-ml-sm dislike-btn"
-            @click.stop="likeUnlike(word._id, false)"
+            :class="{
+              'dislike-btn': isSearchResult,
+              'dislike-btn-2': word?.disliked,
+              'dislike-btn-3': disliked && wId === word._id,
+            }"
+            @click.stop="likeUnlike(word._id, false, word?.disliked)"
             :disabled="likePending || unlikePending"
           >
             <q-icon name="fas fa-thumbs-down flip-horizontal" />
           </q-btn>
-          <span v-if="!unlikePending">{{ 122 }}</span>
-          <q-spinner-dots
-            v-if="unlikePending && wId === word._id"
-            color="primary"
-            size="2em"
-          />
+          <span v-if="unlikePending && wId === word._id">
+            <q-spinner-dots color="grey-9" size="2em" />
+          </span>
+          <span v-else>
+            <span
+              v-if="word?.likes?.dislikes?.length > 0"
+              :class="{
+                'dislike-btn': isSearchResult,
+                'dislike-btn-2': word?.disliked,
+                'dislike-btn-3': disliked && wId === word._id,
+              }"
+            >
+              {{ word?.likes?.dislikes?.length }}
+            </span>
+          </span>
         </span>
       </q-item-label>
     </q-item-section>
@@ -127,17 +158,31 @@ export default defineComponent({
       isVerified: ref(false),
       likePending: ref(false),
       unlikePending: ref(false),
+      liked: ref(false),
+      disliked: ref(false),
     };
+  },
+
+  computed: {
+    loggedIn() {
+      return this.$store.state.auth.status.loggedIn;
+    },
+  },
+
+  created() {
+    if (this.loggedIn) {
+      this.$router.push("/");
+      this.isVerified = false;
+    }
   },
 
   methods: {
     wordDetails(wordId) {},
 
-    async likeUnlike(wordId, like) {
-      if (like) {
-        console.log("LIKE", wordId);
-      } else {
-        console.log("DISLIKE", wordId);
+    async likeUnlike(wordId, like, likeStatus) {
+      if (likeStatus === true) {
+        // If user already liked or disliked word, abort
+        return;
       }
 
       this.wId = wordId;
@@ -168,6 +213,9 @@ export default defineComponent({
             },
           ],
         });
+
+        this.likePending = false;
+        this.unlikePending = false;
         return;
       }
 
@@ -178,23 +226,31 @@ export default defineComponent({
         userId: user._id,
         wordId: wordId,
       };
-
-      console.log(payload);
-      // setTimeout(() => {
-      //   this.likePending = false;
-      //   this.unlikePending = false;
-      // }, 3000);
-      // return;
       await likeWord(payload)
         .then((res) => {
-          console.log(res.data);
-          Notify.create({
-            type: "positive",
-            message: "Success!",
-            group: false,
-          });
           this.likePending = false;
           this.unlikePending = false;
+          this.liked = like ? true : false;
+          this.disliked = like ? false : true;
+          this.words.forEach((word) => {
+            if (word._id === wordId) {
+              if (like === true) {
+                word.liked = true;
+                word.disliked = false;
+                word.likes.likes.push(user._id);
+                word.likes.dislikes = word.likes.dislikes?.filter(
+                  (id) => id !== user._id
+                );
+              } else {
+                word.disliked = true;
+                word.liked = false;
+                word.likes.dislikes.push(user._id);
+                word.likes.likes = word.likes.likes?.filter(
+                  (id) => id !== user._id
+                );
+              }
+            }
+          });
         })
         .catch((error) => {
           Notify.create({
@@ -242,12 +298,23 @@ export default defineComponent({
   color: #000000;
 }
 
-.like-btn-2 {
+.like-btn-2,
+.like-btn-3 {
   color: green;
+}
+.liked-text,
+.liked-text-1 {
+  color: #56b353;
+  font-weight: bold;
 }
 
 .dislike-btn {
-  color: rgba(0, 0, 0, 0.75);
+  color: rgba(0, 0, 0, 0.6);
+}
+.dislike-btn-2,
+.dislike-btn-3 {
+  color: rgba(0, 0, 0);
+  font-weight: bold;
 }
 @media only screen and (max-width: 575px) {
   //
