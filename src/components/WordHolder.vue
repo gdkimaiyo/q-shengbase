@@ -1,7 +1,7 @@
 <template>
   <q-item
     clickable
-    v-for="word in words"
+    v-for="word in sWords"
     :key="word._id"
     @click="wordDetails(word._id)"
   >
@@ -130,6 +130,13 @@
       </q-item-label>
     </q-item-section>
   </q-item>
+  <q-pagination
+    class="q-mt-lg q-mb-md q-ml-sm"
+    v-model="page"
+    :max="totalPages"
+    direction-links
+    @update:model-value="changePage"
+  />
 </template>
 
 <script>
@@ -160,6 +167,10 @@ export default defineComponent({
       unlikePending: ref(false),
       liked: ref(false),
       disliked: ref(false),
+      page: ref(1),
+      perPage: ref(20),
+      totalPages: ref(1),
+      sWords: ref(null),
     };
   },
 
@@ -174,6 +185,8 @@ export default defineComponent({
       this.$router.push("/");
       this.isVerified = false;
     }
+    this.sWords = this.fetchNextPage(this.words, this.page, this.perPage);
+    this.totalPages = ref(Math.ceil(this.words.length / this.perPage));
   },
 
   methods: {
@@ -232,7 +245,7 @@ export default defineComponent({
           this.unlikePending = false;
           this.liked = like ? true : false;
           this.disliked = like ? false : true;
-          this.words.forEach((word) => {
+          this.sWords.forEach((word) => {
             if (word._id === wordId) {
               if (like === true) {
                 word.liked = true;
@@ -263,6 +276,32 @@ export default defineComponent({
         });
     },
 
+    changePage() {
+      this.sWords = this.fetchNextPage(this.words, this.page, this.perPage);
+      window.scrollTo({ top: 0, behavior: "smooth" });
+    },
+
+    fetchNextPage(words, page, perPage) {
+      if (words?.length > 0) {
+        if (page == 1) {
+          if (page * perPage <= words.length) {
+            return words.slice(page - 1, page * perPage);
+          } else {
+            return words.slice(page - 1, words.length);
+          }
+        } else {
+          if (page * perPage <= words.length) {
+            return words.slice(page * perPage - perPage, page * perPage);
+          } else {
+            return words.slice(page * perPage - perPage, words.length);
+          }
+        }
+      } else {
+        return [];
+      }
+    },
+
+    // HELPER Functions
     addedDate(timeStamp) {
       return date.formatDate(new Date(timeStamp), "MMMM DD, YYYY");
     },
