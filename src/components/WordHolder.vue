@@ -12,6 +12,13 @@
           :class="{ 'is-search-result text-weight-bold': isSearchResult }"
         >
           {{ word.word }}
+          <span
+            class="text-positive"
+            style="font-size: 15px"
+            v-if="word?.variations?.length > 0"
+          >
+            ({{ word.variations }})
+          </span>
         </h6>
       </q-item-label>
       <q-item-label
@@ -39,7 +46,7 @@
       <q-item-label class="author">
         <span>By </span>
         <span
-          class="default-color text-weight-bold"
+          class="default-color author-name"
           :class="{ 'is-search-result': isSearchResult }"
         >
           {{ word.author }}
@@ -333,6 +340,10 @@ export default defineComponent({
   color: #0c45b0;
 }
 
+.author-name {
+  font-weight: bold;
+}
+
 .is-search-result {
   color: #000000;
 }
@@ -356,6 +367,8 @@ export default defineComponent({
   font-weight: bold;
 }
 @media only screen and (max-width: 575px) {
-  //
+  .author-name {
+    font-weight: normal;
+  }
 }
 </style>

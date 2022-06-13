@@ -19,3 +19,12 @@ export const REGISTER_FAQS = [
     desc: "Your <b>email address</b> will be used to uniquely identify yourself. Also email address by default will be your <b>username</b>. We will never share your email address.",
   },
 ];
+
+export const BANNED_WORDS = [
+  "kuma",
+  "fuck",
+  "mboro",
+  "malaya",
+  "kumo",
+  "manga",
+]
