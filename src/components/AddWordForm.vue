@@ -23,6 +23,17 @@
             (val) => (val && val.length > 0) || 'Please provide the sheng word',
           ]"
         />
+        <q-input
+          class="q-py-md"
+          v-model="variants"
+          label="Other forms of the word. Separate each with a comma , (Optional)"
+          placeholder="e.g Rada, Radanisha."
+          spellcheck="false"
+          type="text"
+          filled
+          dense
+          :readonly="checking"
+        />
         <q-separator />
         <q-input
           v-model="meaning1"
@@ -112,7 +123,8 @@
         />
         <div class="q-mt-md q-mb-lg">
           <q-btn no-caps :loading="isLoading" type="submit" color="primary">
-            Add Word
+            <span v-if="wordExists">Update Word</span>
+            <span v-else>Add Word</span>
             <template v-slot:loading>
               <q-spinner class="on-left" color="white" />
             </template>
@@ -128,6 +140,7 @@
 import { defineComponent, ref } from "vue";
 import { Notify } from "quasar";
 import { addNewWord, getWord, uWord } from "../shared/services/word.service";
+import { BANNED_WORDS } from "../utils/contants.js";
 
 export default defineComponent({
   name: "AddWordForm",
@@ -137,6 +150,7 @@ export default defineComponent({
 
     return {
       word: ref(null),
+      variants: ref(null),
       wordId: ref(null), // If the word provided exists, get the word id
       origin: ref(null),
       meaning1: ref(null),
@@ -155,6 +169,8 @@ export default defineComponent({
       wordExists: ref(false),
       isSameCoAuthor: ref(false),
       checking: ref(false),
+
+      bannedWords: ref(BANNED_WORDS),
     };
   },
 
@@ -176,8 +192,26 @@ export default defineComponent({
         });
       }
 
+      let is_banned = false;
+      if (
+        this.isBanned(this.word) ||
+        this.isBanned(this.variants) ||
+        this.isBanned(this.meaning1) ||
+        this.isBanned(this.meaning2) ||
+        this.isBanned(this.usage1) ||
+        this.isBanned(this.usage2) ||
+        this.isBanned(this.origin)
+      ) {
+        is_banned = true;
+      }
+
       if (this.wordExists === true) {
-        let payload = { wordId: this.wordId, meaning: [] };
+        let payload = {
+          wordId: this.wordId,
+          meaning: [],
+          variants: this.variants !== null ? this.variants : "",
+          status: is_banned ? 1 : 0,
+        };
         if (this.isSameCoAuthor === true) {
           payload.meaning = [
             ...this.oldMeaning,
@@ -219,9 +253,11 @@ export default defineComponent({
         const payload = {
           authorId: this.author._id,
           word: this.word,
+          variants: this.variants !== null ? this.variants : "",
           origin: this.origin,
           author: `${this.author?.firstname} ${this.author?.lastname}`,
           meaning: meaning,
+          status: is_banned ? 1 : 0,
         };
 
         await addNewWord(payload)
@@ -318,11 +354,26 @@ export default defineComponent({
       this.usage1 = existingWord?.meaning[0]?.usage;
       this.origin = existingWord?.origin;
       this.word = existingWord?.word;
+      this.variants = existingWord?.variations;
       if (existingWord.authorId === this.author._id) {
         this.isSameCoAuthor = true;
       }
       this.authorName = existingWord?.author;
       this.wordId = existingWord?._id;
+    },
+
+    // HELPER FUNCTIONS
+    isBanned(phrase) {
+      phrase = phrase?.length > 0 ? phrase.toLowerCase() : "good";
+      let is_bw = false; // Banned word?
+      for (let i = 0; i < this.bannedWords.length; i++) {
+        const found = phrase.match(this.bannedWords[i]);
+        if (found !== null) {
+          is_bw = true;
+          break;
+        }
+      }
+      return is_bw;
     },
   },
 });
