@@ -85,9 +85,9 @@
       <q-item clickable v-if="!inProgress && results?.length === 0">
         <q-item-section class="q-my-xl">
           <q-item-label class="text-center">
-            <h4 class="q-my-none">
+            <h5 class="q-my-none">
               <b>Search Results Not Found!</b>
-            </h4>
+            </h5>
             <p class="q-my-none" style="color: #6c757d">
               Sorry, but the word <b>{{ searchPhrase }}</b> was not found in the
               <b>ShengBase</b> dictionary. Please add it
