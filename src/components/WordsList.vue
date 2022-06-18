@@ -129,7 +129,7 @@
           </div>
           <q-item-label class="text-center text-primary q-mt-xl">
             <h6 class="q-my-none">
-              <b>No sheng words available</b>
+              <b>Connection REFUSED...</b>
             </h6>
           </q-item-label>
         </q-item-section>
