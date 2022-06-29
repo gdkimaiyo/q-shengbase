@@ -119,6 +119,10 @@ export default defineComponent({
             const rn = this.randomNumber(0, element?.meaning?.length - 1);
             element.rMeaning = element?.meaning[rn].meaning;
           });
+          // Get only the words with likes
+          this.mostLikes = this.mostLikes?.filter(
+            (word) => word?.likes?.likes?.length > 0
+          );
 
           this.topUsers = [];
           this.allWords.forEach((wrd) => {

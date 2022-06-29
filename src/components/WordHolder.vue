@@ -26,10 +26,13 @@
         v-for="(meaning, index) in word.meaning"
         :key="meaning._id"
       >
-        <sup v-if="word.meaning.length > 1" style="color: #000000">
+        <sup
+          v-if="word.meaning.length > 1 && meaning?.meaning?.length > 0"
+          style="color: #000000"
+        >
           {{ index + 1 }}
         </sup>
-        <span>{{ meaning?.meaning }}</span>
+        <span v-if="meaning?.meaning?.length > 0">{{ meaning?.meaning }}</span>
       </q-item-label>
       <br />
       <q-item-label
@@ -37,10 +40,13 @@
         v-for="(meaning, index) in word.meaning"
         :key="meaning._id"
       >
-        <sup v-if="word.meaning.length > 1" style="color: #000000">
+        <sup
+          v-if="word.meaning.length > 1 && meaning?.usage?.length > 0"
+          style="color: #000000"
+        >
           {{ index + 1 }}
         </sup>
-        <em>{{ meaning?.usage }}</em>
+        <em v-if="meaning?.usage?.length > 0">{{ meaning?.usage }}</em>
       </q-item-label>
       <br />
       <q-item-label class="author">
