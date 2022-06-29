@@ -198,6 +198,7 @@ export default defineComponent({
     onAddWord() {
       // Close dialog when a word is successfully added
       this.isOpen = false;
+      this.getAllWords();
     },
 
     getAllWords() {

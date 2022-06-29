@@ -20,7 +20,8 @@
           @change="checkIfExists(word)"
           lazy-rules
           :rules="[
-            (val) => (val && val.length > 0) || 'Please provide the sheng word',
+            (val) =>
+              (val && val.trim().length > 0) || 'Please provide the sheng word',
           ]"
         />
         <q-input
@@ -47,7 +48,7 @@
           lazy-rules
           :rules="[
             (val) =>
-              (val && val.length > 0) ||
+              (val && val.trim().length > 0) ||
               'Please provide meaning of the sheng word',
           ]"
         />
@@ -64,7 +65,7 @@
           lazy-rules
           :rules="[
             (val) =>
-              (val && val.length > 0) ||
+              (val && val.trim().length > 0) ||
               'Please provide example usage for the sheng word',
           ]"
         />
@@ -109,7 +110,7 @@
           lazy-rules
           :rules="[
             (val) =>
-              (val && val.length > 0) ||
+              (val && val.trim().length > 0) ||
               'Please provide origin of the sheng word',
           ]"
         />
@@ -162,7 +163,7 @@ export default defineComponent({
       authorName: ref(`${author?.firstname} ${author?.lastname}`),
 
       meaning2Label: ref("Second meaning (Optional)"),
-      usage2Label: ref("Example usage (Optional)"),
+      usage2Label: ref("Second example usage (Optional)"),
 
       oldMeaning: ref(null),
 
@@ -180,15 +181,15 @@ export default defineComponent({
 
       let meaning = [
         {
-          meaning: this.meaning1,
-          usage: this.usage1,
+          meaning: this.meaning1.trim(),
+          usage: this.usage1.trim(),
         },
       ];
 
-      if (this.meaning2 !== null) {
+      if (this.usage2 !== null) {
         meaning.push({
-          meaning: this.meaning2,
-          usage: this.usage2,
+          meaning: this.meaning2 !== null ? this.meaning2.trim() : "",
+          usage: this.usage2.trim(),
         });
       }
 
@@ -215,14 +216,14 @@ export default defineComponent({
         if (this.isSameCoAuthor === true) {
           payload.meaning = [
             ...this.oldMeaning,
-            { meaning: this.meaning2, usage: this.usage2 },
+            { meaning: this.meaning2.trim(), usage: this.usage2.trim() },
           ];
         } else {
           payload.meaning = [
             ...this.oldMeaning,
             {
-              meaning: this.meaning2,
-              usage: this.usage2,
+              meaning: this.meaning2.trim(),
+              usage: this.usage2.trim(),
               coAuthorId: this.author._id,
               coAuthor: `${this.author?.firstname} ${this.author?.lastname}`,
             },
@@ -253,7 +254,7 @@ export default defineComponent({
         const payload = {
           authorId: this.author._id,
           word: this.word,
-          variants: this.variants !== null ? this.variants : "",
+          variations: this.variants !== null ? this.variants : "",
           origin: this.origin,
           author: `${this.author?.firstname} ${this.author?.lastname}`,
           meaning: meaning,
@@ -337,7 +338,7 @@ export default defineComponent({
       if (this.wordExists === false) {
         return true;
       } else {
-        if (val && val.length > 0) {
+        if (val && val.trim().length > 0) {
           return true;
         } else {
           return false;
