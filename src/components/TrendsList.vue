@@ -117,7 +117,10 @@ export default defineComponent({
           this.mostLikes?.forEach((element) => {
             // Random number/index of word meaning.
             const rn = this.randomNumber(0, element?.meaning?.length - 1);
-            element.rMeaning = element?.meaning[rn].meaning;
+            element.rMeaning =
+              element?.meaning[rn]?.meaning?.length > 0
+                ? element.meaning[rn].meaning
+                : element?.meaning[0].meaning;
           });
           // Get only the words with likes
           this.mostLikes = this.mostLikes?.filter(
