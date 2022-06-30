@@ -235,9 +235,12 @@ export default defineComponent({
           .then((res) => {
             Notify.create({
               type: "positive",
-              message: "Success! Word updated successfully.",
+              message: is_banned
+                ? "Success! Word updates are currently under review."
+                : "Success! Word updated successfully.",
               group: false,
             });
+
             this.isLoading = false;
             this.$emit("wordAdded", true);
             this.$router.push("/");
@@ -265,7 +268,9 @@ export default defineComponent({
           .then((res) => {
             Notify.create({
               type: "positive",
-              message: "Success! Word added successfully.",
+              message: is_banned
+                ? "Success! Word added is under review."
+                : "Success! Word added successfully.",
               group: false,
             });
             this.isLoading = false;
