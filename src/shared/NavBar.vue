@@ -8,7 +8,6 @@
       <div>
         <div id="onDesktop">
           <q-btn no-caps flat to="/about" class="nav-btn" label="About" />
-          <q-btn no-caps flat to="/faqs" class="nav-btn" label="FAQs" />
           <q-btn
             v-if="!isAuthenticated"
             no-caps
@@ -59,10 +58,6 @@
             >
               <q-item to="/about" exact clickable v-ripple>
                 <q-item-section> About </q-item-section>
-              </q-item>
-
-              <q-item to="/faqs" exact clickable v-ripple>
-                <q-item-section> FAQs </q-item-section>
               </q-item>
 
               <q-item
