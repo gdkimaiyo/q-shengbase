@@ -109,13 +109,36 @@
     </q-list>
 
     <q-list bordered separator v-if="isLoading">
-      <q-item clickable v-ripple>
-        <q-item-section class="q-my-xl">
-          <q-item-label class="text-center">
-            <q-spinner color="primary" size="2.5em" /> <br />
-            <h6 class="q-my-none text-primary">
-              <b>Loading sheng words ... </b>
-            </h6>
+      <q-item v-for="index in 20" :key="index">
+        <q-item-section>
+          <q-item-label class="row">
+            <q-skeleton type="text" class="q-mr-md" width="30%" />
+            <q-skeleton type="text" class="q-mr-sm" width="8%" />
+            <q-skeleton type="text" class="q-mr-sm" width="8%" />
+            <q-skeleton type="text" class="q-mr-sm" width="8%" />
+          </q-item-label>
+          <q-item-label>
+            <q-skeleton type="text" />
+            <q-skeleton type="text" width="80%" />
+          </q-item-label>
+          <br />
+          <q-item-label class="row" caption>
+            <q-btn flat round>
+              <q-icon
+                name="fas fa-thumbs-up"
+                style="padding-right: 4px"
+                color="grey"
+              />
+            </q-btn>
+            <q-skeleton type="text" width="20px" />
+            <q-btn flat round class="q-ml-sm">
+              <q-icon
+                name="fas fa-thumbs-down flip-horizontal"
+                style="padding-left: 4px"
+                color="grey"
+              />
+            </q-btn>
+            <q-skeleton type="text" width="20px" />
           </q-item-label>
         </q-item-section>
       </q-item>
@@ -125,9 +148,9 @@
       <q-item clickable v-ripple>
         <q-item-section class="q-my-xl">
           <div class="text-center">
-            <q-icon name="fas fa-bars" size="100px" color="secondary" />
+            <q-icon name="fas fa-bars" size="100px" color="dark" />
           </div>
-          <q-item-label class="text-center text-primary q-mt-xl">
+          <q-item-label class="text-center text-dark q-mt-xl">
             <h6 class="q-my-none">
               <b>Connection REFUSED...</b>
             </h6>
