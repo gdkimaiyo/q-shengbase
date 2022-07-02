@@ -27,10 +27,30 @@
           </div>
         </q-list>
         <div v-if="isLoading">
-          <q-spinner-dots color="primary" size="2.5em" />
-          <span class="q-pl-sm" style="color: rgba(0, 0, 0, 0.65)">
-            Loading list
-          </span>
+          <q-item v-for="index in 5" :key="index">
+            <q-item-section>
+              <q-item-label>
+                <q-skeleton type="text" width="37%" />
+              </q-item-label>
+              <q-item-label>
+                <q-skeleton type="text" />
+              </q-item-label>
+              <q-item-label caption>
+                <q-skeleton type="text" width="80%" />
+              </q-item-label>
+            </q-item-section>
+
+            <q-item-section side top>
+              <q-item-label class="row" caption>
+                <q-icon
+                  name="fas fa-thumbs-up"
+                  style="padding-right: 4px"
+                  color="grey"
+                />
+                <q-skeleton type="text" width="10px" />
+              </q-item-label>
+            </q-item-section>
+          </q-item>
         </div>
         <div v-if="!isLoading && mostLikes?.length === 0">
           <p style="color: rgba(0, 0, 0, 0.65)">List unavailable</p>
@@ -72,10 +92,26 @@
           </div>
         </q-list>
         <div v-if="isLoading">
-          <q-spinner-dots color="primary" size="2.5em" />
-          <span class="q-pl-sm" style="color: rgba(0, 0, 0, 0.65)">
-            Loading top users
-          </span>
+          <q-item v-for="index in 5" :key="index">
+            <q-item-section avatar>
+              <q-skeleton type="QAvatar" />
+            </q-item-section>
+
+            <q-item-section>
+              <q-item-label>
+                <q-skeleton type="text" />
+              </q-item-label>
+              <q-item-label caption>
+                <q-skeleton type="text" width="65%" />
+              </q-item-label>
+            </q-item-section>
+
+            <q-item-section side top>
+              <q-item-label caption>
+                <q-icon :name="`fas fa-${index}`" color="grey" />
+              </q-item-label>
+            </q-item-section>
+          </q-item>
         </div>
         <div v-if="!isLoading && topUsers?.length === 0">
           <p style="color: rgba(0, 0, 0, 0.65)">List unavailable</p>

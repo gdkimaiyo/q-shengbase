@@ -25,22 +25,23 @@
             label="Sign In"
           />
 
-          <q-btn v-if="isAuthenticated" no-caps flat class="nav-btn">
-            My Profile
-            <q-menu auto-close>
-              <q-list
-                style="min-width: 100px; height: calc(100% - 0); margin-top: 0"
-              >
-                <q-item to="/profile" exact clickable v-ripple>
-                  <q-item-section> Profile </q-item-section>
-                </q-item>
+          <q-btn
+            v-if="isAuthenticated"
+            no-caps
+            flat
+            to="/profile"
+            class="nav-btn"
+            label="My Profile"
+          />
 
-                <q-item @click="doLogout()" exact clickable v-ripple>
-                  <q-item-section> Sign Out </q-item-section>
-                </q-item>
-              </q-list>
-            </q-menu>
-          </q-btn>
+          <q-btn
+            v-if="isAuthenticated"
+            no-caps
+            @click="doLogout()"
+            flat
+            class="nav-btn"
+            label="Sign Out"
+          />
         </div>
 
         <q-btn
