@@ -25,3 +25,38 @@ export const isVerified = async () => {
 
   return verified;
 };
+
+// Heler function for pagination - fetch next or previous page contents
+export const fetchNextPage = (arr, page, perPage) => {
+  if (arr?.length > 0) {
+    if (page == 1) {
+      if (page * perPage <= arr.length) {
+        return arr.slice(page - 1, page * perPage);
+      } else {
+        return arr.slice(page - 1, arr.length);
+      }
+    } else {
+      if (page * perPage <= arr.length) {
+        return arr.slice(page * perPage - perPage, page * perPage);
+      } else {
+        return arr.slice(page * perPage - perPage, arr.length);
+      }
+    }
+  } else {
+    return [];
+  }
+};
+// Generate a random number
+export const randomNumber = (min, max) => {
+  // min and max included
+  return Math.floor(Math.random() * (max - min + 1) + min);
+};
+
+// Remove duplicates in an array of objects
+export const removeDuplicates = (arrObj, objKey) => {
+  return [
+    ...new Map(
+      arrObj.map((item) => [item[objKey], item])
+    ).values(),
+  ];
+};

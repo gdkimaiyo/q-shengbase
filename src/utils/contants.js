@@ -9,6 +9,13 @@ export const FAQS = [
   {
     id: 2,
     open: false,
+    faq: "How do I earn points?",
+    desc: "As mentioned above, participating in <b>ShengBase Trivia</b> and answering quizzes correctly earns you points.",
+    desc2: "Secondly, every 5 sheng words you add to the ShengBase dictionary, earns you 1 point. Also, every 5 likes of all cumulative likes from the words you add, earns you 1 point.",
+  },
+  {
+    id: 2,
+    open: false,
     faq: "How do I add a sheng word?",
     desc: "To add a word, go to homepage and click the <b>add word (+)</b> button. A modal form will pop up. Fill in the required information, e.g, the sheng word and its meaning.",
   },

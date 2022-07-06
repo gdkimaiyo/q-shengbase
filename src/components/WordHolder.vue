@@ -49,24 +49,24 @@
         <em v-if="meaning?.usage?.length > 0">{{ meaning?.usage }}</em>
       </q-item-label>
       <br />
-      <q-item-label class="author">
+      <q-item-label caption style="font-size: 0.85rem">
         <span>By </span>
         <span
-          class="default-color author-name"
+          class="text-weight-bold"
           :class="{ 'is-search-result': isSearchResult }"
         >
           {{ word.author }}
         </span>
         <span> On </span>
         <span
-          class="default-color"
+          class="text-weight-bold"
           :class="{ 'is-search-result text-weight-bold': isSearchResult }"
         >
           {{ addedDate(word.created) }}
         </span>
         <span>. Origin </span>
         <span
-          class="default-color"
+          class="text-weight-bold"
           :class="{ 'is-search-result text-weight-bold': isSearchResult }"
         >
           {{ word.origin }}
@@ -144,6 +144,7 @@
     </q-item-section>
   </q-item>
   <q-pagination
+    v-if="words?.length > perPage"
     class="q-mt-lg q-mb-md q-ml-sm"
     v-model="page"
     :max="totalPages"
@@ -158,7 +159,7 @@ import { Notify } from "quasar";
 import { date } from "quasar";
 
 import { likeWord } from "../shared/services/word.service";
-import { isVerified } from "../utils/helpers.js";
+import { isVerified, fetchNextPage } from "../utils/helpers.js";
 
 export default defineComponent({
   name: "WordHolder",
@@ -195,10 +196,9 @@ export default defineComponent({
 
   created() {
     if (this.loggedIn) {
-      this.$router.push("/");
       this.isVerified = false;
     }
-    this.sWords = this.fetchNextPage(this.words, this.page, this.perPage);
+    this.sWords = fetchNextPage(this.words, this.page, this.perPage);
     this.totalPages = ref(Math.ceil(this.words.length / this.perPage));
   },
 
@@ -290,28 +290,8 @@ export default defineComponent({
     },
 
     changePage() {
-      this.sWords = this.fetchNextPage(this.words, this.page, this.perPage);
+      this.sWords = fetchNextPage(this.words, this.page, this.perPage);
       window.scrollTo({ top: 0, behavior: "smooth" });
-    },
-
-    fetchNextPage(words, page, perPage) {
-      if (words?.length > 0) {
-        if (page == 1) {
-          if (page * perPage <= words.length) {
-            return words.slice(page - 1, page * perPage);
-          } else {
-            return words.slice(page - 1, words.length);
-          }
-        } else {
-          if (page * perPage <= words.length) {
-            return words.slice(page * perPage - perPage, page * perPage);
-          } else {
-            return words.slice(page * perPage - perPage, words.length);
-          }
-        }
-      } else {
-        return [];
-      }
     },
 
     // HELPER Functions
@@ -323,18 +303,6 @@ export default defineComponent({
 </script>
 
 <style lang="scss" scoped>
-.word-meaning,
-.author {
-  span {
-    color: #000000;
-  }
-  .default-color {
-    color: #0c45b0;
-  }
-  .is-search-result {
-    color: #000000;
-  }
-}
 .example-usage {
   em {
     color: rgba(44, 62, 80, 0.85);
@@ -344,10 +312,6 @@ export default defineComponent({
 .default-color,
 .like-btn {
   color: #0c45b0;
-}
-
-.author-name {
-  font-weight: bold;
 }
 
 .is-search-result {
@@ -373,8 +337,6 @@ export default defineComponent({
   font-weight: bold;
 }
 @media only screen and (max-width: 575px) {
-  .author-name {
-    font-weight: normal;
-  }
+  //
 }
 </style>

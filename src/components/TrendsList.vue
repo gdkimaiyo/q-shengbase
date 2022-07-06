@@ -79,7 +79,7 @@
 
               <q-item-section side top>
                 <q-item-label caption>
-                  <q-icon :name="user.badge" color="positive" />
+                  <q-icon :name="user.pos" color="positive" />
                 </q-item-label>
               </q-item-section>
             </q-item>
@@ -126,6 +126,8 @@ import { defineComponent, ref } from "vue";
 // import { Notify } from "quasar";
 import { getWords } from "../shared/services/word.service";
 
+import { randomNumber } from "../utils/helpers.js";
+
 export default defineComponent({
   name: "TrendsList",
 
@@ -152,7 +154,7 @@ export default defineComponent({
           // Randomly pick the word meaning
           this.mostLikes?.forEach((element) => {
             // Random number/index of word meaning.
-            const rn = this.randomNumber(0, element?.meaning?.length - 1);
+            const rn = randomNumber(0, element?.meaning?.length - 1);
             element.rMeaning =
               element?.meaning[rn]?.meaning?.length > 0
                 ? element.meaning[rn].meaning
@@ -164,24 +166,35 @@ export default defineComponent({
           );
 
           this.topUsers = [];
+          let authorIds = [];
           this.allWords.forEach((wrd) => {
-            this.topUsers.push({
-              author: wrd.author,
-              authorId: wrd.authorId,
-            });
+            if (!authorIds.includes(wrd.authorId)) {
+              authorIds.push(wrd.authorId);
+              // Filter out user words
+              const uWords = this.allWords?.filter(
+                (word) => word?.authorId === wrd.authorId
+              );
+              let likes = 0;
+              uWords.forEach((element) => {
+                likes += element?.likes?.likes?.length;
+              });
+              this.topUsers.push({
+                author: wrd.author,
+                authorId: wrd.authorId,
+                likes: likes,
+              });
+            }
           });
-          // Remove duplicates
-          this.topUsers = [
-            ...new Map(
-              this.topUsers.map((item) => [item["authorId"], item])
-            ).values(),
-          ];
+          // Sort by totals likes in descending order
+          this.topUsers = this.topUsers?.sort((a, b) => {
+            return b?.likes - a?.likes;
+          });
           // Get only the top 5 users
           this.topUsers = this.topUsers?.slice(0, 5);
           // Assign fontawesome badge icon
           let i = 1;
           this.topUsers.forEach((element) => {
-            element.badge = `fas fa-${i}`;
+            element.pos = `fas fa-${i}`;
             i++;
           });
           this.isLoading = false;
@@ -192,12 +205,6 @@ export default defineComponent({
           this.mostLikes = [];
           this.topUsers = [];
         });
-    },
-
-    // HELPER FUNCTIONS
-    randomNumber(min, max) {
-      // min and max included
-      return Math.floor(Math.random() * (max - min + 1) + min);
     },
   },
 
