@@ -26,7 +26,7 @@ export const isVerified = async () => {
   return verified;
 };
 
-// Heler function for pagination - fetch next or previous page contents
+// Helper function for pagination - fetch next or previous page contents
 export const fetchNextPage = (arr, page, perPage) => {
   if (arr?.length > 0) {
     if (page == 1) {
@@ -46,6 +46,7 @@ export const fetchNextPage = (arr, page, perPage) => {
     return [];
   }
 };
+
 // Generate a random number
 export const randomNumber = (min, max) => {
   // min and max included
@@ -59,4 +60,51 @@ export const removeDuplicates = (arrObj, objKey) => {
       arrObj.map((item) => [item[objKey], item])
     ).values(),
   ];
+};
+
+export const validateFullName = (name) => {
+  if (name) {
+    const re = /^[a-zA-Z\-’']+( [a-zA-Z\-’']+)+$/;
+    return re.test(name);
+  } else {
+    return false;
+  }
+};
+
+export const validateEmail = (email) => {
+  if (email) {
+    const re = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+    return re.test(email);
+  } else {
+    return false;
+  }
+};
+
+export const validateMobile = (phone) => {
+  const re = /^\d{10}$/;
+  const re2 = /^\+?([0-9]{3})\)?([0-9]{9})$/;
+  if (phone) {
+    if (phone.match(re) || phone.match(re2)) {
+      return true;
+    }
+    return false;
+  }
+  return true; // To change to false if cell phone number is required
+};
+
+// Get firstname and lastname from fullname
+export const getName = (name, fullname) => { // name is either firstname or lastname
+  if (name === "first") {
+    let arr = fullname?.split(" ");
+    return titleCase(arr[0]);
+  } else {
+    let arr = fullname?.split(" ");
+    return titleCase(arr[1]);
+  }
+};
+
+export const titleCase = (str) => {
+  return str?.toLowerCase()?.replace(/\b\S/g, function (t) {
+    return t?.toUpperCase();
+  });
 };

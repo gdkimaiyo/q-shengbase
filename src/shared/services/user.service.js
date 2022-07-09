@@ -13,6 +13,15 @@ export const getUser = async (id) => {
   return response.data;
 };
 
+// Update user details: u for Update
+export const uUser = async (data) => {
+  const response = await axios.put(
+    `${BACKEND_API}/api/v1/users/${data.userId}`,
+    data
+  );
+  return response.data;
+};
+
 // Location Service
 export const getLocation = async () => {
   const response = await axios.get(`https://api.db-ip.com/v2/free/self`);
