@@ -31,7 +31,7 @@
           transition-next="jump-up"
         >
           <q-tab-panel name="profile">
-            <q-list>
+            <q-list v-if="!showForm">
               <q-item class="q-my-md q-pl-none">
                 <q-item-section avatar>
                   <q-avatar color="primary" text-color="white" size="72px">
@@ -48,8 +48,8 @@
                   <q-item-label lines="1">
                     {{ user.email }}
                   </q-item-label>
-                  <q-item-label caption lines="1" v-if="user?.mobile">
-                    {{ user.mobile }}
+                  <q-item-label caption lines="1" v-if="user?.cellPhone">
+                    {{ user.cellPhone }}
                   </q-item-label>
                 </q-item-section>
               </q-item>
@@ -63,7 +63,7 @@
                   <q-item-label class="q-pt-sm" lines="1">
                     <a
                       class="text-primary cursor-pointer"
-                      @click="updateProfile"
+                      @click="showForm = !showForm"
                     >
                       Edit profile
                     </a>
@@ -71,6 +71,24 @@
                 </q-item-section>
               </q-item>
             </q-list>
+            <div v-if="showForm">
+              <div class="q-pt-sm">
+                <a
+                  class="text-primary cursor-pointer"
+                  style="padding-left: 4px"
+                  @click="showForm = false"
+                >
+                  <q-icon name="fas fa-arrow-left-long" size="22px" />
+                </a>
+              </div>
+              <div class="text-subtitle1 q-pt-md q-pb-sm text-weight-bold">
+                Update your profile
+              </div>
+              <UpdateProfileForm
+                :details="user"
+                @profileUpdated="onProfileUpdated"
+              />
+            </div>
           </q-tab-panel>
 
           <q-tab-panel name="words">
@@ -183,6 +201,7 @@ import { defineComponent, ref } from "vue";
 import { date, Notify } from "quasar";
 
 import AfterNavBar from "../components/AfterNavBar.vue";
+import UpdateProfileForm from "../components/UpdateProfileForm.vue";
 
 import { getUser } from "../shared/services/user.service";
 import { getWords } from "../shared/services/word.service";
@@ -195,6 +214,7 @@ export default defineComponent({
 
   components: {
     AfterNavBar,
+    UpdateProfileForm,
   },
 
   setup() {
@@ -212,6 +232,7 @@ export default defineComponent({
       totalPages: ref(1),
       points: ref(0),
       showInfo: ref(false),
+      showForm: ref(false), // Show update profile form
     };
   },
 
@@ -319,13 +340,9 @@ export default defineComponent({
       return date.formatDate(new Date(timeStamp), "HH:mm");
     },
 
-    updateProfile() {
-      Notify.create({
-        type: "info",
-        message: "Edit profile feature coming soon...",
-        color: "primary",
-        group: false,
-      });
+    onProfileUpdated() {
+      this.showForm = false;
+      this.getAUser();
     },
 
     viewHistory() {

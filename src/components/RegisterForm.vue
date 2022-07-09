@@ -79,6 +79,8 @@
 import { defineComponent, ref } from "vue";
 import { Notify } from "quasar";
 
+import { validateEmail, validateFullName, getName } from "../utils/helpers.js";
+
 export default defineComponent({
   name: "RegisterForm",
 
@@ -149,23 +151,9 @@ export default defineComponent({
       // this.clearForm();
     },
 
-    validateFullName(name) {
-      if (name) {
-        const re = /^[a-zA-Z\-’']+( [a-zA-Z\-’']+)+$/;
-        return re.test(name);
-      } else {
-        return false;
-      }
-    },
-
-    validateEmail(email) {
-      if (email) {
-        const re = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
-        return re.test(email);
-      } else {
-        return false;
-      }
-    },
+    validateFullName,
+    validateEmail,
+    getName,
 
     validatePass(pass) {
       if (pass && pass.length > 3) {
@@ -188,22 +176,6 @@ export default defineComponent({
       this.email = null;
       this.password = null;
       this.confirmPassword = null;
-    },
-
-    getName(name, fullname) {
-      if (name === "first") {
-        let arr = fullname?.split(" ");
-        return this.titleCase(arr[0]);
-      } else {
-        let arr = fullname?.split(" ");
-        return this.titleCase(arr[1]);
-      }
-    },
-
-    titleCase(str) {
-      return str?.toLowerCase()?.replace(/\b\S/g, function (t) {
-        return t?.toUpperCase();
-      });
     },
   },
 });
