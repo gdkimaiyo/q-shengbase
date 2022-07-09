@@ -46,6 +46,8 @@
 import { defineComponent, ref } from "vue";
 import { Notify } from "quasar";
 
+import { validateEmail } from "../utils/helpers.js";
+
 export default defineComponent({
   name: "LoginForm",
 
@@ -101,14 +103,7 @@ export default defineComponent({
       );
     },
 
-    validateEmail(email) {
-      if (email) {
-        const re = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
-        return re.test(email);
-      } else {
-        return false;
-      }
-    },
+    validateEmail,
   },
 });
 </script>
