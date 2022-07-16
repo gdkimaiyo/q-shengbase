@@ -224,8 +224,7 @@ export default defineComponent({
             {
               meaning: this.meaning2.trim(),
               usage: this.usage2.trim(),
-              coAuthorId: this.author._id,
-              coAuthor: `${this.author?.firstname} ${this.author?.lastname}`,
+              coAuthor: this.author._id,
             },
           ];
         }
@@ -255,11 +254,10 @@ export default defineComponent({
           });
       } else {
         const payload = {
-          authorId: this.author._id,
+          author: this.author._id,
           word: this.word,
           variations: this.variants !== null ? this.variants : "",
           origin: this.origin,
-          author: `${this.author?.firstname} ${this.author?.lastname}`,
           meaning: meaning,
           status: is_banned ? 1 : 0,
         };
@@ -361,10 +359,10 @@ export default defineComponent({
       this.origin = existingWord?.origin;
       this.word = existingWord?.word;
       this.variants = existingWord?.variations;
-      if (existingWord.authorId === this.author._id) {
+      if (existingWord?.author?._id === this.author._id) {
         this.isSameCoAuthor = true;
       }
-      this.authorName = existingWord?.author;
+      this.authorName = `${existingWord?.author?.firstname} ${existingWord?.author?.lastname}`;
       this.wordId = existingWord?._id;
     },
 

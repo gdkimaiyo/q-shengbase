@@ -7,7 +7,14 @@
 
       <div>
         <div id="onDesktop">
-          <q-btn no-caps flat to="/about" class="nav-btn" label="About" />
+          <q-btn
+            no-caps
+            flat
+            to="/about"
+            class="nav-btn"
+            :class="{ 'active-link': currentRoute === '/about' }"
+            label="About"
+          />
           <q-btn
             v-if="!isAuthenticated"
             no-caps
@@ -31,6 +38,7 @@
             flat
             to="/profile"
             class="nav-btn"
+            :class="{ 'active-link': currentRoute === '/profile' }"
             label="My Profile"
           />
 
@@ -111,7 +119,7 @@
 <script>
 import { defineComponent, ref } from "vue";
 import { Notify } from "quasar";
-
+import { useRoute } from "vue-router";
 import { isVerified } from "../utils/helpers.js";
 
 export default defineComponent({
@@ -143,6 +151,12 @@ export default defineComponent({
       this.$router.push("/login");
     },
   },
+
+  computed: {
+    currentRoute() {
+      return useRoute().path;
+    },
+  },
 });
 </script>
 
@@ -171,6 +185,10 @@ export default defineComponent({
   font-size: 16px;
 }
 .nav-btn:hover {
+  color: #42b983;
+}
+
+.active-link {
   color: #42b983;
 }
 
