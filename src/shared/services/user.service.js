@@ -13,6 +13,12 @@ export const getUser = async (id) => {
   return response.data;
 };
 
+// Get user logs. Get by userId
+export const getUserLogs = async () => {
+  const response = await axios.get(`${BACKEND_API}/api/v1/userlogs`);
+  return response.data;
+};
+
 // Update user details: u for Update
 export const uUser = async (data) => {
   const response = await axios.put(

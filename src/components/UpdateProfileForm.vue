@@ -117,7 +117,7 @@ export default defineComponent({
         return;
       }
 
-      // Update word by adding second meaning
+      // Update user profile
       await uUser(data)
         .then((res) => {
           Notify.create({

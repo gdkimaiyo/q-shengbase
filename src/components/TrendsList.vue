@@ -74,7 +74,16 @@
               </q-item-section>
 
               <q-item-section>
-                <q-item-label>{{ user.author }}</q-item-label>
+                <q-item-label>
+                  <span
+                    :class="{
+                      'text-green text-weight-bold':
+                        user.authorId === loggedInUser?._id,
+                    }"
+                  >
+                    {{ user.author }}
+                  </span>
+                </q-item-label>
               </q-item-section>
 
               <q-item-section side top>
@@ -132,10 +141,12 @@ export default defineComponent({
   name: "TrendsList",
 
   setup() {
+    const loggedInUser = JSON.parse(localStorage.getItem("sb_user"));
     return {
       allWords: ref(null),
       mostLikes: ref(null),
       topUsers: ref(null),
+      loggedInUser: ref(loggedInUser),
       isLoading: ref(false),
     };
   },
@@ -168,19 +179,19 @@ export default defineComponent({
           this.topUsers = [];
           let authorIds = [];
           this.allWords.forEach((wrd) => {
-            if (!authorIds.includes(wrd.authorId)) {
-              authorIds.push(wrd.authorId);
+            if (!authorIds.includes(wrd.author._id)) {
+              authorIds.push(wrd.author._id);
               // Filter out user words
               const uWords = this.allWords?.filter(
-                (word) => word?.authorId === wrd.authorId
+                (word) => word?.author._id === wrd.author._id
               );
               let likes = 0;
               uWords.forEach((element) => {
                 likes += element?.likes?.likes?.length;
               });
               this.topUsers.push({
-                author: wrd.author,
-                authorId: wrd.authorId,
+                author: `${wrd.author.firstname} ${wrd.author.lastname}`,
+                authorId: wrd.author._id,
                 likes: likes,
               });
             }
