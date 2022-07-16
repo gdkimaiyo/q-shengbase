@@ -55,7 +55,7 @@
           class="text-weight-bold"
           :class="{ 'is-search-result': isSearchResult }"
         >
-          {{ word.author }}
+          {{ word.author.firstname }} {{ word.author.lastname }}
         </span>
         <span> On </span>
         <span

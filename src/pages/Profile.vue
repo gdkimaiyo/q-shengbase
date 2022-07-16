@@ -11,15 +11,18 @@
         </p>
       </div>
       <div class="profile" v-if="!isLoading && user !== null">
-        <q-tabs v-model="tab" no-caps inline-label class="text-primary">
-          <q-tab name="profile" icon="fas fa-user">
-            <span class="gt-xs q-pl-sm">My Profile</span>
+        <q-tabs v-model="tab" no-caps class="text-primary">
+          <q-tab name="profile">
+            <q-icon name="fas fa-user" size="18px" />
+            <span class="tab-label">Profile</span>
           </q-tab>
-          <q-tab name="words" icon="fas fa-spell-check">
-            <span class="gt-xs q-pl-sm">My Words</span>
+          <q-tab name="words">
+            <q-icon name="fas fa-spell-check" size="18px" />
+            <span class="tab-label">My Words</span>
           </q-tab>
-          <q-tab name="awards" icon="fas fa-medal">
-            <span class="gt-xs q-pl-sm">My Points</span>
+          <q-tab name="awards">
+            <q-icon name="fas fa-medal" size="18px" />
+            <span class="tab-label">My Points</span>
           </q-tab>
         </q-tabs>
         <q-tab-panels
@@ -31,70 +34,151 @@
           transition-next="jump-up"
         >
           <q-tab-panel name="profile">
-            <q-list v-if="!showForm">
-              <q-item class="q-my-md q-pl-none">
-                <q-item-section avatar>
-                  <q-avatar color="primary" text-color="white" size="72px">
-                    <span class="user-initials">
-                      {{ user.firstname.charAt(0)
-                      }}{{ user.lastname.charAt(0) }}
-                    </span>
-                  </q-avatar>
-                </q-item-section>
-                <q-item-section>
-                  <q-item-label class="text-h6 text-weight-bold">
-                    {{ user.firstname }} {{ user.lastname }}
-                  </q-item-label>
-                  <q-item-label lines="1">
-                    {{ user.email }}
-                  </q-item-label>
-                  <q-item-label caption lines="1" v-if="user?.cellPhone">
-                    {{ user.cellPhone }}
-                  </q-item-label>
-                </q-item-section>
-              </q-item>
-              <q-item>
-                <q-item-section>
-                  <q-item-label class="q-pt-md" lines="1">
-                    <span style="color: rgba(0, 0, 0, 0.54)">Joined: </span>
-                    {{ dateFormatter(user.created) }} at
-                    {{ registerTime(user.created) }}
-                  </q-item-label>
-                  <q-item-label class="q-pt-sm" lines="1">
-                    <a
-                      class="text-primary cursor-pointer"
-                      @click="showForm = !showForm"
-                    >
-                      Edit profile
-                    </a>
-                  </q-item-label>
-                </q-item-section>
-              </q-item>
-            </q-list>
-            <div v-if="showForm">
+            <div v-if="!showUserLog">
+              <q-list v-if="!showForm">
+                <q-item class="q-mt-md q-mb-sm q-pl-none">
+                  <q-item-section avatar>
+                    <q-avatar color="primary" text-color="white" size="72px">
+                      <span class="user-initials">
+                        {{ user.firstname.charAt(0)
+                        }}{{ user.lastname.charAt(0) }}
+                      </span>
+                    </q-avatar>
+                  </q-item-section>
+                  <q-item-section>
+                    <q-item-label class="text-h6 text-weight-bold">
+                      {{ user.firstname }} {{ user.lastname }}
+                    </q-item-label>
+                    <q-item-label lines="1">
+                      {{ user.email }}
+                    </q-item-label>
+                    <q-item-label caption lines="1" v-if="user?.cellPhone">
+                      {{ user.cellPhone }}
+                    </q-item-label>
+                  </q-item-section>
+                </q-item>
+                <q-item>
+                  <q-item-section>
+                    <q-item-label class="q-pt-sm" lines="1">
+                      <span style="color: rgba(0, 0, 0, 0.54)">Joined: </span>
+                      {{ dateFormatter(user.created) }} at
+                      {{ timeFormatter(user.created) }}
+                    </q-item-label>
+                    <q-item-label class="row justify-between q-pt-lg" lines="1">
+                      <div class="col">
+                        <a
+                          class="text-primary cursor-pointer"
+                          @click="showForm = !showForm"
+                        >
+                          Edit Profile
+                        </a>
+                      </div>
+                      <div class="col">
+                        <a
+                          class="text-primary cursor-pointer q-pr-md"
+                          @click="showUserLog = !showUserLog"
+                        >
+                          Activity Log
+                          <q-tooltip
+                            class="gt-xs bg-primary"
+                            transition-show="scale"
+                            transition-hide="scale"
+                            :offset="[10, 10]"
+                          >
+                            View my activity log
+                          </q-tooltip>
+                        </a>
+                      </div>
+                    </q-item-label>
+                  </q-item-section>
+                </q-item>
+              </q-list>
+              <div v-if="showForm">
+                <div class="q-pt-sm">
+                  <a
+                    class="text-primary cursor-pointer"
+                    style="padding-left: 4px"
+                    @click="showForm = false"
+                  >
+                    <q-icon name="fas fa-arrow-left-long" size="22px" />
+                  </a>
+                </div>
+                <div class="text-subtitle1 q-pt-md q-pb-sm text-weight-bold">
+                  Update your profile
+                </div>
+                <UpdateProfileForm
+                  :details="user"
+                  @profileUpdated="onProfileUpdated"
+                />
+              </div>
+            </div>
+            <div v-if="showUserLog">
               <div class="q-pt-sm">
                 <a
                   class="text-primary cursor-pointer"
                   style="padding-left: 4px"
-                  @click="showForm = false"
+                  @click="showUserLog = false"
                 >
                   <q-icon name="fas fa-arrow-left-long" size="22px" />
                 </a>
               </div>
               <div class="text-subtitle1 q-pt-md q-pb-sm text-weight-bold">
-                Update your profile
+                Activity logs
               </div>
-              <UpdateProfileForm
-                :details="user"
-                @profileUpdated="onProfileUpdated"
-              />
+              <q-list
+                class="history-list"
+                v-if="!loadingUserLogs && userLogs.length > 0"
+              >
+                <div v-for="(activity, idx) in userLogs" :key="idx">
+                  <q-item class="q-my-sm" clickable v-ripple>
+                    <q-item-section>
+                      <q-item-label>{{ activity.action }}</q-item-label>
+                      <q-item-label caption lines="2">
+                        {{ dateFormatter(activity.created) }} at
+                        {{ timeFormatter(activity.created) }}
+                      </q-item-label>
+                    </q-item-section>
+                  </q-item>
+                  <q-separator
+                    style="margin-right: 0; margin-left: 0"
+                    inset
+                    v-if="idx !== userLogs.length - 1"
+                  />
+                </div>
+              </q-list>
+              <q-list
+                class="history-list"
+                v-if="!loadingUserLogs && userLogs.length === 0"
+              >
+                <q-item class="q-my-sm" clickable v-ripple>
+                  <q-item-section>
+                    <q-item-label> Activity log unavailable! </q-item-label>
+                    <q-item-label caption lines="2">
+                      Your activity log is yet to be recorded.
+                    </q-item-label>
+                  </q-item-section>
+                </q-item>
+              </q-list>
+
+              <q-list class="history-list" v-if="loadingUserLogs">
+                <q-item class="q-my-sm" clickable v-ripple>
+                  <q-item-section>
+                    <q-item-label>
+                      <span v-for="index in 3" :key="index">
+                        <q-spinner-puff color="primary" size="1.5rem" />
+                      </span>
+                      Loading my activity logs...
+                    </q-item-label>
+                  </q-item-section>
+                </q-item>
+              </q-list>
             </div>
           </q-tab-panel>
 
           <q-tab-panel name="words">
             <q-card class="trending-words">
               <q-card-section class="q-mt-md">
-                <q-list v-if="uWords?.length > 0">
+                <q-list v-if="!loadingWords && uWords?.length > 0">
                   <div v-for="(word, index) in userWords" :key="word._id">
                     <q-item>
                       <q-item-section>
@@ -134,8 +218,16 @@
                     @update:model-value="changePage"
                   />
                 </q-list>
-                <div v-if="uWords?.length === 0">
+                <div v-if="!loadingWords && uWords?.length === 0">
                   You have not added any sheng words yet!
+                </div>
+                <div v-if="loadingWords" class="q-mt-md">
+                  <p>
+                    <span v-for="index in 3" :key="index">
+                      <q-spinner-puff color="primary" size="1.5rem" />
+                    </span>
+                    Loading my words
+                  </p>
                 </div>
               </q-card-section>
             </q-card>
@@ -148,8 +240,12 @@
                 {{ points }}
               </div>
             </div>
-            <div class="row justify-center q-mt-md">
-              <q-btn no-caps flat class="text-primary" @click="viewHistory">
+            <div class="row justify-center q-mt-lg">
+              <a
+                class="text-primary cursor-pointer q-pr-md"
+                :class="{ 'active-link': viewPointsTallying === true }"
+                @click="(viewPointsTallying = true), (showInfo = false)"
+              >
                 History
                 <q-tooltip
                   class="gt-xs bg-primary"
@@ -157,33 +253,96 @@
                   transition-hide="scale"
                   :offset="[10, 10]"
                 >
-                  View points tallying history
+                  History of points tallying
                 </q-tooltip>
-              </q-btn>
-              <q-btn no-caps flat class="text-primary" @click="redeemPoints">
+              </a>
+              <a
+                class="text-primary cursor-pointer q-pr-md"
+                @click="redeemPoints"
+              >
                 Redeem
-              </q-btn>
-              <q-btn
-                no-caps
-                flat
-                class="text-primary"
-                @click="showInfo = !showInfo"
+              </a>
+              <a
+                class="text-primary cursor-pointer q-pr-md"
+                :class="{ 'active-link': showInfo === true }"
+                @click="(showInfo = true), (viewPointsTallying = false)"
               >
                 <q-icon name="fas fa-circle-question" class="q-pr-sm" />
                 <span v-if="showInfo">Hide Info</span>
                 <span v-else>Show Info</span>
-              </q-btn>
+              </a>
             </div>
-            <q-separator inset />
-            <div class="row justify-center text-center q-mt-md" v-if="showInfo">
+            <q-separator inset class="sep-inset q-mt-sm" />
+            <div class="row q-mt-md" v-if="viewPointsTallying">
+              <q-list
+                class="history-list"
+                v-if="!loadingWords && pointsHistory.length > 0"
+              >
+                <q-item
+                  v-for="(history, idx) in pointsHistory"
+                  :key="idx"
+                  class="q-my-sm"
+                  clickable
+                  v-ripple
+                >
+                  <q-item-section>
+                    <q-item-label>{{ history.origin }}</q-item-label>
+                    <q-item-label caption lines="2">
+                      {{ history.info }}
+                    </q-item-label>
+                  </q-item-section>
+
+                  <q-item-section side>
+                    <q-item-label>
+                      <span
+                        style="color: rgba(0, 0, 0, 0.64)"
+                        class="text-positive"
+                      >
+                        +
+                      </span>
+                      <b class="text-positive">{{ history.points }}</b>
+                    </q-item-label>
+                  </q-item-section>
+                </q-item>
+              </q-list>
+              <q-list
+                class="history-list"
+                v-if="!loadingWords && pointsHistory.length === 0"
+              >
+                <q-item class="q-my-sm" clickable v-ripple>
+                  <q-item-section>
+                    <q-item-label>
+                      Points tallying history unavailable!
+                    </q-item-label>
+                    <q-item-label caption lines="2">
+                      Start by adding sheng words to earn points. Also,
+                      participate in weekly <b>Trivia</b> to earn points.
+                    </q-item-label>
+                  </q-item-section>
+                </q-item>
+              </q-list>
+              <q-list class="history-list" v-if="loadingWords">
+                <q-item class="q-my-sm" clickable v-ripple>
+                  <q-item-section>
+                    <q-item-label>
+                      <span v-for="index in 3" :key="index">
+                        <q-spinner-puff color="primary" size="1.5rem" />
+                      </span>
+                      Loading points tallying history
+                    </q-item-label>
+                  </q-item-section>
+                </q-item>
+              </q-list>
+            </div>
+            <div class="row q-mt-md" v-if="showInfo">
               <p style="color: rgba(0, 0, 0, 0.64)" class="text-weight-bold">
                 How do I get points?
               </p>
-              <p>
+              <p class="p-info">
                 Every 5 words you add earns you 1 point. Also, every 5 likes of
                 all cumulative likes from the words you add, earns you 1 point.
               </p>
-              <p>
+              <p class="p-info">
                 Lastly, participating in
                 <b style="color: rgba(0, 0, 0, 0.55)">ShengBase Trivia</b> and
                 answering quizzes correctly earns you points.
@@ -199,11 +358,9 @@
 <script>
 import { defineComponent, ref } from "vue";
 import { date, Notify } from "quasar";
-
 import AfterNavBar from "../components/AfterNavBar.vue";
 import UpdateProfileForm from "../components/UpdateProfileForm.vue";
-
-import { getUser } from "../shared/services/user.service";
+import { getUser, getUserLogs } from "../shared/services/user.service";
 import { getWords } from "../shared/services/word.service";
 
 import { isVerified, fetchNextPage, randomNumber } from "../utils/helpers.js";
@@ -222,17 +379,24 @@ export default defineComponent({
       src: ref("bg.jpg"),
       paths: ref(["Home", "Profile"]),
       isLoading: ref(false),
+      loadingWords: ref(false),
+      loadingUserLogs: ref(false),
       user: ref(null),
       userWords: ref(null),
       uWords: ref(null),
+      userLogs: ref(null),
       isVerified: ref(false),
       tab: ref("profile"),
       page: ref(1),
       perPage: ref(10),
       totalPages: ref(1),
-      points: ref(0),
       showInfo: ref(false),
       showForm: ref(false), // Show update profile form
+      showUserLog: ref(false),
+      viewPointsTallying: ref(true),
+
+      points: ref(0),
+      pointsHistory: ref([]),
     };
   },
 
@@ -267,8 +431,9 @@ export default defineComponent({
       await getUser(user._id)
         .then((response) => {
           this.user = response.data;
-          this.getUserWords(user._id);
           this.isLoading = false;
+          this.getUserWords(user._id);
+          this.getUserLogs(user._id);
         })
         .catch((error) => {
           if (error?.response?.status === 404) {
@@ -293,11 +458,22 @@ export default defineComponent({
     },
 
     getUserWords(userId) {
+      this.loadingWords = true;
       getWords()
         .then((response) => {
           this.uWords = response.data?.filter(
-            (word) => word?.authorId === userId
+            (word) => word?.author?._id === userId
           );
+
+          // Record points history
+          if (this.uWords?.length > 0) {
+            this.pointsHistory.push({
+              origin: `Points from ${this.uWords.length} words added.`,
+              count: this.uWords.length,
+              info: "Every 5 words added earns 1 point.",
+              points: Math.floor(this.uWords?.length / 5),
+            });
+          }
 
           // Sort by total word likes
           this.uWords = this.uWords?.sort((a, b) => {
@@ -319,11 +495,43 @@ export default defineComponent({
           });
           this.points += Math.floor(totalLikes / 5);
 
+          // Record points history
+          if (totalLikes > 0) {
+            this.pointsHistory.push({
+              origin: `Points from ${totalLikes} word likes.`,
+              count: totalLikes,
+              info: "Every 5 likes from all cumulative word likes, earns 1 point.",
+              points: Math.floor(totalLikes / 5),
+            });
+          }
+
           this.userWords = fetchNextPage(this.uWords, this.page, this.perPage);
           this.totalPages = ref(Math.ceil(this.uWords.length / this.perPage));
+
+          this.loadingWords = false;
         })
         .catch((error) => {
           this.uWords = [];
+          this.loadingWords = false;
+        });
+    },
+
+    getUserLogs(userId) {
+      this.loadingUserLogs = true;
+      getUserLogs()
+        .then((response) => {
+          this.userLogs = response.data?.filter(
+            (log) => log?.userId === userId
+          );
+          // Sort by date created
+          this.userLogs = this.userLogs?.sort((a, b) => {
+            return new Date(b.created) - new Date(a.created);
+          });
+          this.loadingUserLogs = false;
+        })
+        .catch((error) => {
+          this.userLogs = [];
+          this.loadingUserLogs = false;
         });
     },
 
@@ -336,7 +544,7 @@ export default defineComponent({
       return date.formatDate(new Date(timeStamp), "MMMM DD, YYYY");
     },
 
-    registerTime(timeStamp) {
+    timeFormatter(timeStamp) {
       return date.formatDate(new Date(timeStamp), "HH:mm");
     },
 
@@ -345,14 +553,13 @@ export default defineComponent({
       this.getAUser();
     },
 
-    viewHistory() {
+    activityLog() {
       Notify.create({
         type: "info",
-        message: "View points history coming soon...",
+        message: "My activity log coming soon...",
         color: "primary",
         group: false,
       });
-      this.showInfo = false;
     },
 
     redeemPoints() {
@@ -386,7 +593,33 @@ export default defineComponent({
 .user-initials {
   font-weight: 500;
 }
+
+.tab-label {
+  padding-top: 6px;
+}
+
+.active-link {
+  color: #21ba45 !important;
+}
+
+.history-list {
+  width: 100%;
+  // .q-item {
+  //   margin-right: 0;
+  //   margin-left: 0;
+  // }
+}
+
+.p-info {
+  font-size: 15px;
+}
 @media only screen and (max-width: 575px) {
-  //
+  .tab-label {
+    padding-top: 3px;
+  }
+  .sep-inset {
+    margin-right: 0;
+    margin-left: 0;
+  }
 }
 </style>
