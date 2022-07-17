@@ -46,7 +46,7 @@
 import { defineComponent, ref } from "vue";
 import { Notify } from "quasar";
 
-import { validateEmail } from "../utils/helpers.js";
+import { validateEmail, saveActivityLogs } from "../utils/helpers.js";
 
 export default defineComponent({
   name: "LoginForm",
@@ -76,6 +76,14 @@ export default defineComponent({
             message: "Success. Sign-In successful.",
             group: false,
           });
+
+          // Save user activity log
+          const userAction = {
+            userId: res.data?._id,
+            action: `Signed in to your account`,
+          };
+          saveActivityLogs(userAction);
+
           this.isLoading = false;
           this.$router.push("/");
         },
@@ -89,6 +97,13 @@ export default defineComponent({
               message: "Email or password do not match.",
               group: false,
             });
+
+            // Save user activity log
+            const userAction = {
+              userId: error?.response?.data?.data?._id,
+              action: `Attempted to sign in to your account: Email or password do not match.`,
+            };
+            saveActivityLogs(userAction);
           } else {
             Notify.create({
               type: "negative",
