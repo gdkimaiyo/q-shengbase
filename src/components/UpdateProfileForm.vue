@@ -62,12 +62,18 @@
 import { defineComponent, ref } from "vue";
 import { Notify } from "quasar";
 import { uUser } from "../shared/services/user.service";
-import { validateMobile, validateEmail, titleCase } from "../utils/helpers.js";
+import {
+  saveActivityLogs,
+  validateMobile,
+  validateEmail,
+  titleCase,
+} from "../utils/helpers.js";
 
 export default defineComponent({
   name: "UpdateProfileForm",
 
   props: {
+    // User details to auto fill the form fills
     details: Object,
   },
 
@@ -125,6 +131,13 @@ export default defineComponent({
             message: "Success! Profile updated successfully.",
             group: false,
           });
+
+          // Save user activity log
+          const userAction = {
+            userId: data.userId,
+            action: "Updated my profile.",
+          };
+          saveActivityLogs(userAction);
 
           this.isLoading = false;
           this.$emit("profileUpdated", true);

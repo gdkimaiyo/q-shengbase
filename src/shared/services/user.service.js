@@ -19,6 +19,12 @@ export const getUserLogs = async () => {
   return response.data;
 };
 
+// Save user action / activity log
+export const saveUserLogs = async (payload) => {
+  const response = await axios.post(`${BACKEND_API}/api/v1/userlogs`, payload);
+  return response.data;
+}
+
 // Update user details: u for Update
 export const uUser = async (data) => {
   const response = await axios.put(

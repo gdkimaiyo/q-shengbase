@@ -141,6 +141,7 @@
 import { defineComponent, ref } from "vue";
 import { Notify } from "quasar";
 import { addNewWord, getWord, uWord } from "../shared/services/word.service";
+import { saveActivityLogs } from "../utils/helpers.js";
 import { BANNED_WORDS } from "../utils/contants.js";
 
 export default defineComponent({
@@ -240,6 +241,13 @@ export default defineComponent({
               group: false,
             });
 
+            // Save user activity log
+            const userAction = {
+              userId: this.author._id,
+              action: `Co-Author. Added second meaning to sheng word: ${this.word}`,
+            };
+            saveActivityLogs(userAction);
+
             this.isLoading = false;
             this.$emit("wordAdded", true);
             this.$router.push("/");
@@ -271,6 +279,14 @@ export default defineComponent({
                 : "Success! Word added successfully.",
               group: false,
             });
+
+            // Save user activity log
+            const userAction = {
+              userId: payload.author,
+              action: `Added sheng word: ${payload.word}`,
+            };
+            saveActivityLogs(userAction);
+
             this.isLoading = false;
             this.$emit("wordAdded", true);
             this.$router.push("/");

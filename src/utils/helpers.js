@@ -1,4 +1,5 @@
 import AuthService from "../shared/services/auth.service";
+import { saveUserLogs } from "../shared/services/user.service";
 
 // Returns true if user is verified
 export const isVerified = async () => {
@@ -24,6 +25,15 @@ export const isVerified = async () => {
     });
 
   return verified;
+};
+
+// Save user activity logs
+export const saveActivityLogs = async (action) => {
+  let success = false;
+
+  await saveUserLogs(action)
+    .then((res) => { success = true; })
+    .catch((error) => { success = false; });
 };
 
 // Helper function for pagination - fetch next or previous page contents
