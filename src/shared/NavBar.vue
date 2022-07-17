@@ -120,7 +120,7 @@
 import { defineComponent, ref } from "vue";
 import { Notify } from "quasar";
 import { useRoute } from "vue-router";
-import { isVerified } from "../utils/helpers.js";
+import { isVerified, saveActivityLogs } from "../utils/helpers.js";
 
 export default defineComponent({
   name: "NavBar",
@@ -142,12 +142,21 @@ export default defineComponent({
     },
 
     doLogout() {
+      const user = JSON.parse(localStorage.getItem("sb_user"));
       this.$store.dispatch("auth/logout");
       Notify.create({
         type: "positive",
         message: "Success! Logout successful.",
         group: false,
       });
+
+      // Save user activity log
+      const userAction = {
+        userId: user?._id,
+        action: `Signed out of your account`,
+      };
+      saveActivityLogs(userAction);
+
       this.$router.push("/login");
     },
   },

@@ -79,7 +79,12 @@
 import { defineComponent, ref } from "vue";
 import { Notify } from "quasar";
 
-import { validateEmail, validateFullName, getName } from "../utils/helpers.js";
+import {
+  validateEmail,
+  validateFullName,
+  getName,
+  saveActivityLogs,
+} from "../utils/helpers.js";
 
 export default defineComponent({
   name: "RegisterForm",
@@ -126,6 +131,14 @@ export default defineComponent({
             message: "Success! Registration successful.",
             group: false,
           });
+
+          // Save user activity log
+          const userAction = {
+            userId: res?._id,
+            action: `Registered for an account`,
+          };
+          saveActivityLogs(userAction);
+
           this.isLoading = false;
           this.$router.push("/login");
         },
