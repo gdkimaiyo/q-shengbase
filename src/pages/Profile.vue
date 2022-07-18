@@ -29,7 +29,7 @@
           v-model="tab"
           animated
           swipeable
-          vertical
+          horizontal
           transition-prev="jump-up"
           transition-next="jump-up"
         >

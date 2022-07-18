@@ -77,8 +77,7 @@
                 <q-item-label>
                   <span
                     :class="{
-                      'text-green text-weight-bold':
-                        user.authorId === loggedInUser?._id,
+                      'logged-user': user.authorId === loggedInUser?._id,
                     }"
                   >
                     {{ user.author }}
@@ -247,7 +246,14 @@ export default defineComponent({
   font-size: 14px;
 }
 
+.logged-user {
+  color: green;
+  font-weight: bold;
+}
+
 @media only screen and (max-width: 575px) {
-  //
+  .logged-user {
+    font-weight: normal;
+  }
 }
 </style>
