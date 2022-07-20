@@ -159,7 +159,11 @@ import { Notify } from "quasar";
 import { date } from "quasar";
 
 import { likeWord } from "../shared/services/word.service";
-import { isVerified, fetchNextPage } from "../utils/helpers.js";
+import {
+  isVerified,
+  fetchNextPage,
+  saveActivityLogs,
+} from "../utils/helpers.js";
 
 export default defineComponent({
   name: "WordHolder",
@@ -258,8 +262,10 @@ export default defineComponent({
           this.unlikePending = false;
           this.liked = like ? true : false;
           this.disliked = like ? false : true;
+          let likedWord;
           this.sWords.forEach((word) => {
             if (word._id === wordId) {
+              likedWord = word.word;
               if (like === true) {
                 word.liked = true;
                 word.disliked = false;
@@ -277,6 +283,15 @@ export default defineComponent({
               }
             }
           });
+
+          // Save user activity log
+          const userAction = {
+            userId: payload.userId,
+            action: `${
+              like === true ? "Liked" : "Unliked"
+            } sheng word: ${likedWord}`,
+          };
+          saveActivityLogs(userAction);
         })
         .catch((error) => {
           Notify.create({
