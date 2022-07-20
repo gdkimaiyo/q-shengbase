@@ -1,14 +1,9 @@
 <template>
-  <q-item
-    clickable
-    v-for="word in sWords"
-    :key="word._id"
-    @click="wordDetails(word._id)"
-  >
+  <q-item v-for="word in sWords" :key="word._id" @click="wordDetails(word._id)">
     <q-item-section>
       <q-item-label>
-        <h6
-          class="q-my-none default-color"
+        <div
+          class="word q-mt-md q-mb-sm default-color"
           :class="{ 'is-search-result text-weight-bold': isSearchResult }"
         >
           {{ word.word }}
@@ -19,7 +14,7 @@
           >
             ({{ word.variations }})
           </span>
-        </h6>
+        </div>
       </q-item-label>
       <q-item-label
         class="word-meaning"
@@ -143,6 +138,7 @@
       </q-item-label>
     </q-item-section>
   </q-item>
+  <q-separator spaced v-if="words?.length > perPage" />
   <q-pagination
     v-if="words?.length > perPage"
     class="q-mt-lg q-mb-md q-ml-sm"
@@ -322,6 +318,13 @@ export default defineComponent({
   em {
     color: rgba(44, 62, 80, 0.85);
   }
+}
+
+.word {
+  font-size: 18px;
+}
+.q-item {
+  padding: 8px 4px;
 }
 
 .default-color,

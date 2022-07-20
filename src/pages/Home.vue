@@ -6,6 +6,7 @@
     />
     <div class="main-page q-pa-md">
       <StatsList class="lt-sm" />
+      <TriviaForm class="lt-sm" />
       <div class="row content q-mt-lg">
         <div class="col-xs-12 col-sm-8 col-md-8">
           <WordsList />
@@ -13,6 +14,7 @@
         <div class="col-xs-12 col-sm-4 col-md-4">
           <div class="gt-xs q-pa-md q-mt-lg"></div>
           <StatsList class="gt-xs" />
+          <TriviaForm class="gt-xs" />
           <TrendsList />
         </div>
       </div>
@@ -26,6 +28,7 @@ import AfterNavBar from "../components/AfterNavBar.vue";
 import WordsList from "../components/WordsList.vue";
 import StatsList from "../components/StatsList.vue";
 import TrendsList from "../components/TrendsList.vue";
+import TriviaForm from "src/components/TriviaForm.vue";
 
 export default defineComponent({
   // eslint-disable-next-line vue/multi-word-component-names
@@ -36,6 +39,7 @@ export default defineComponent({
     WordsList,
     StatsList,
     TrendsList,
+    TriviaForm,
   },
 });
 </script>
