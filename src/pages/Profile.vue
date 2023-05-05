@@ -40,8 +40,8 @@
                   <q-item-section avatar>
                     <q-avatar color="primary" text-color="white" size="72px">
                       <span class="user-initials">
-                        {{ user.firstname.charAt(0)
-                        }}{{ user.lastname.charAt(0) }}
+                        {{ user.firstname.charAt(0) }}
+                        {{ user.lastname.charAt(0) }}
                       </span>
                     </q-avatar>
                   </q-item-section>
@@ -125,9 +125,39 @@
               <div class="text-subtitle1 q-pt-md q-pb-sm text-weight-bold">
                 Activity logs
               </div>
+              <div>
+                <q-input
+                  dense
+                  v-model="searchItem"
+                  placeholder="e.g: Updated my profile"
+                  class="q-mb-md"
+                  @keyup="startSearch"
+                  label="Search for an activity log"
+                >
+                  <template v-slot:prepend>
+                    <q-btn
+                      round
+                      dense
+                      flat
+                      icon="search"
+                      @click="startSearch"
+                    />
+                  </template>
+                  <template v-slot:append>
+                    <q-btn
+                      v-if="searchItem !== ''"
+                      round
+                      dense
+                      flat
+                      icon="close"
+                      @click="clearSearch"
+                    />
+                  </template>
+                </q-input>
+              </div>
               <q-list
                 class="history-list"
-                v-if="!loadingUserLogs && userLogs.length > 0"
+                v-if="!loadingUserLogs && uLogs.length > 0"
               >
                 <div v-for="(activity, idx) in userLogs" :key="idx">
                   <q-item class="q-my-sm" clickable v-ripple>
@@ -146,9 +176,17 @@
                   />
                 </div>
               </q-list>
+              <q-pagination
+                v-if="uLogs?.length > logsPerPage && beginSearch === false"
+                class="q-mt-lg q-mb-md q-ml-sm"
+                v-model="logPage"
+                :max="userLogsPages"
+                direction-links
+                @update:model-value="changePage(uLogs?.length)"
+              />
               <q-list
                 class="history-list"
-                v-if="!loadingUserLogs && userLogs.length === 0"
+                v-if="!loadingUserLogs && uLogs.length === 0"
               >
                 <q-item class="q-my-sm" clickable v-ripple>
                   <q-item-section>
@@ -385,11 +423,17 @@ export default defineComponent({
       userWords: ref(null),
       uWords: ref(null),
       userLogs: ref(null),
+      uLogs: ref(null),
       isVerified: ref(false),
       tab: ref("profile"),
+
       page: ref(1),
       perPage: ref(10),
       totalPages: ref(1),
+      logPage: ref(1),
+      logsPerPage: ref(10),
+      userLogsPages: ref(1),
+
       showInfo: ref(false),
       showForm: ref(false), // Show update profile form
       showUserLog: ref(false),
@@ -397,6 +441,9 @@ export default defineComponent({
 
       points: ref(0),
       pointsHistory: ref([]),
+
+      searchItem: ref(""),
+      beginSearch: ref(false),
     };
   },
 
@@ -520,23 +567,61 @@ export default defineComponent({
       this.loadingUserLogs = true;
       getUserLogs()
         .then((response) => {
-          this.userLogs = response.data?.filter(
-            (log) => log?.userId === userId
-          );
+          this.uLogs = response.data?.filter((log) => log?.userId === userId);
           // Sort by date created
-          this.userLogs = this.userLogs?.sort((a, b) => {
+          this.uLogs = this.uLogs?.sort((a, b) => {
             return new Date(b.created) - new Date(a.created);
           });
+
+          this.userLogs = fetchNextPage(
+            this.uLogs,
+            this.logPage,
+            this.logsPerPage
+          );
+          this.userLogsPages = ref(
+            Math.ceil(this.uLogs.length / this.logsPerPage)
+          );
           this.loadingUserLogs = false;
         })
         .catch((error) => {
-          this.userLogs = [];
+          this.uLogs = [];
           this.loadingUserLogs = false;
         });
     },
 
-    changePage() {
-      this.userWords = fetchNextPage(this.uWords, this.page, this.perPage);
+    clearSearch() {
+      this.searchItem = "";
+      this.beginSearch = false;
+      this.userLogs = fetchNextPage(this.uLogs, this.logPage, this.logsPerPage);
+    },
+
+    startSearch() {
+      if (this.searchItem !== "") {
+        this.beginSearch = true;
+        this.userLogs = this.uLogs?.filter((x) => {
+          const action = x?.action?.toLocaleLowerCase();
+          return action?.includes(this.searchItem?.toLocaleLowerCase());
+        });
+      } else {
+        this.beginSearch = false;
+        this.userLogs = fetchNextPage(
+          this.uLogs,
+          this.logPage,
+          this.logsPerPage
+        );
+      }
+    },
+
+    changePage(length) {
+      if (length && this.uLogs?.length === length) {
+        this.userLogs = fetchNextPage(
+          this.uLogs,
+          this.logPage,
+          this.logsPerPage
+        );
+      } else {
+        this.userWords = fetchNextPage(this.uWords, this.page, this.perPage);
+      }
       window.scrollTo({ top: 0, behavior: "smooth" });
     },
 
