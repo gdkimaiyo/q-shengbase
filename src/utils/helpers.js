@@ -32,8 +32,12 @@ export const saveActivityLogs = async (action) => {
   let success = false;
 
   await saveUserLogs(action)
-    .then((res) => { success = true; })
-    .catch((error) => { success = false; });
+    .then((res) => {
+      success = true;
+    })
+    .catch((error) => {
+      success = false;
+    });
 };
 
 // Helper function for pagination - fetch next or previous page contents
@@ -65,11 +69,7 @@ export const randomNumber = (min, max) => {
 
 // Remove duplicates in an array of objects
 export const removeDuplicates = (arrObj, objKey) => {
-  return [
-    ...new Map(
-      arrObj.map((item) => [item[objKey], item])
-    ).values(),
-  ];
+  return [...new Map(arrObj.map((item) => [item[objKey], item])).values()];
 };
 
 export const validateFullName = (name) => {
@@ -103,7 +103,8 @@ export const validateMobile = (phone) => {
 };
 
 // Get firstname and lastname from fullname
-export const getName = (name, fullname) => { // name is either firstname or lastname
+export const getName = (name, fullname) => {
+  // name is either firstname or lastname
   if (name === "first") {
     let arr = fullname?.split(" ");
     return titleCase(arr[0]);

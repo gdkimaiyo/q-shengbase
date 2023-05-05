@@ -3,7 +3,6 @@
     <div class="row q-mb-sm q-ml-sm">
       <div class="col-8">
         <q-input
-          rounded
           outlined
           dense
           v-model="searchTerm"
@@ -64,8 +63,8 @@
             <q-item-section>
               <q-item-label>
                 <h6 class="q-mt-md q-mb-none text-primary">
-                  <span style="color: rgba(12, 69, 176, 0.87)"
-                    >Searching for
+                  <span style="color: rgba(12, 69, 176, 0.87)">
+                    Searching for
                   </span>
                   <b class="q-pr-sm">{{ searchPhrase }}</b>
                   <q-spinner-dots size="1.5em" />
@@ -117,6 +116,17 @@
         >
           <WordHolder :words="results" :isSearchResult="true" />
           <q-separator spaced />
+          <!-- <q-item>
+            <q-item-section>
+              <q-item-label>
+                <h6 class="q-mt-md q-mb-sm text-primary">
+                  <span style="color: rgba(12, 69, 176, 0.87)">
+                    --- End of search results
+                  </span>
+                </h6>
+              </q-item-label>
+            </q-item-section>
+          </q-item> -->
         </q-list>
 
         <q-list separator v-if="!isLoading && words?.length > 0">
@@ -260,7 +270,6 @@ export default defineComponent({
               }
             });
           }
-          // console.log(JSON.parse(JSON.stringify(this.words)));
           this.isLoading = false;
         })
         .catch((error) => {
