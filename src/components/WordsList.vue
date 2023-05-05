@@ -56,108 +56,125 @@
       </div>
     </div>
 
-    <q-list class="q-mb-xl" bordered separator v-if="beginSearch">
-      <q-item v-if="inProgress">
-        <q-item-section>
-          <q-item-label>
-            <h6 class="q-mt-md q-mb-sm text-primary">
-              <span style="color: rgba(12, 69, 176, 0.87)">Searching for </span>
-              <b class="q-pr-sm">{{ searchPhrase }}</b>
-              <q-spinner-dots size="1.5em" />
-            </h6>
-          </q-item-label>
-        </q-item-section>
-      </q-item>
+    <q-card class="my-card">
+      <q-card-section class="card-header"> Sheng Words </q-card-section>
+      <q-card-section class="q-pt-none q-mt-md">
+        <q-list separator v-if="beginSearch">
+          <q-item v-if="inProgress" class="q-py-none">
+            <q-item-section>
+              <q-item-label>
+                <h6 class="q-mt-md q-mb-none text-primary">
+                  <span style="color: rgba(12, 69, 176, 0.87)"
+                    >Searching for
+                  </span>
+                  <b class="q-pr-sm">{{ searchPhrase }}</b>
+                  <q-spinner-dots size="1.5em" />
+                </h6>
+              </q-item-label>
+            </q-item-section>
+          </q-item>
 
-      <q-item v-if="!inProgress && results?.length > 0">
-        <q-item-section>
-          <q-item-label>
-            <h6 class="q-mt-md q-mb-sm text-primary">
-              <span style="color: rgba(12, 69, 176, 0.87)">
-                Showing results for
-              </span>
-              <b>{{ searchPhrase }}</b>
-            </h6>
-          </q-item-label>
-        </q-item-section>
-      </q-item>
+          <q-item v-if="!inProgress && results?.length > 0">
+            <q-item-section>
+              <q-item-label>
+                <h6 class="q-mt-md q-mb-sm text-primary">
+                  <span style="color: rgba(12, 69, 176, 0.87)">
+                    Showing results for
+                  </span>
+                  <b>{{ searchPhrase }}</b>
+                </h6>
+              </q-item-label>
+            </q-item-section>
+          </q-item>
 
-      <q-item clickable v-if="!inProgress && results?.length === 0">
-        <q-item-section class="q-my-xl">
-          <q-item-label class="text-center">
-            <h5 class="q-my-none">
-              <b>Search Results Not Found!</b>
-            </h5>
-            <p class="q-my-none" style="color: #6c757d">
-              Sorry, but the word <b>{{ searchPhrase }}</b> was not found in the
-              <b>ShengBase</b> dictionary. Please add it
-              <a @click="openFormDialog" class="text-primary">
-                here <q-icon name="fas fa-arrow-right-long" color="primary" />
-              </a>
-            </p>
-          </q-item-label>
-        </q-item-section>
-      </q-item>
+          <q-item v-if="!inProgress && results?.length === 0">
+            <q-item-section class="q-my-xl">
+              <q-item-label class="text-center">
+                <h5 class="q-my-none">
+                  <b>Search Results Not Found!</b>
+                </h5>
+                <p class="q-my-none" style="color: #6c757d">
+                  Sorry, but the word <b>{{ searchPhrase }}</b> was not found in
+                  the <b>ShengBase</b> dictionary. Please add it
+                  <a
+                    @click="openFormDialog"
+                    class="cursor-pointer text-primary"
+                  >
+                    here
+                    <q-icon name="fas fa-arrow-right-long" color="primary" />
+                  </a>
+                </p>
+              </q-item-label>
+            </q-item-section>
+          </q-item>
+          <q-separator spaced v-if="!inProgress && results?.length === 0" />
+        </q-list>
 
-      <div v-if="!inProgress && results?.length > 0">
-        <WordHolder :words="results" :isSearchResult="true" />
-      </div>
-    </q-list>
+        <q-list
+          separator
+          v-if="!inProgress && results?.length > 0 && beginSearch"
+          class="q-pb-md"
+        >
+          <WordHolder :words="results" :isSearchResult="true" />
+          <q-separator spaced />
+        </q-list>
 
-    <q-list bordered separator v-if="!isLoading && words?.length > 0">
-      <WordHolder :words="words" />
-    </q-list>
+        <q-list separator v-if="!isLoading && words?.length > 0">
+          <WordHolder :words="words" />
+        </q-list>
 
-    <q-list bordered separator v-if="isLoading">
-      <q-item v-for="index in 20" :key="index">
-        <q-item-section>
-          <q-item-label class="row">
-            <q-skeleton type="text" class="q-mr-md" width="30%" />
-            <q-skeleton type="text" class="q-mr-sm" width="8%" />
-            <q-skeleton type="text" class="q-mr-sm" width="8%" />
-            <q-skeleton type="text" class="q-mr-sm" width="8%" />
-          </q-item-label>
-          <q-item-label>
-            <q-skeleton type="text" />
-            <q-skeleton type="text" width="80%" />
-          </q-item-label>
-          <br />
-          <q-item-label class="row" caption>
-            <q-btn flat round>
-              <q-icon
-                name="fas fa-thumbs-up"
-                style="padding-right: 4px"
-                color="grey"
-              />
-            </q-btn>
-            <q-skeleton type="text" width="20px" />
-            <q-btn flat round class="q-ml-sm">
-              <q-icon
-                name="fas fa-thumbs-down flip-horizontal"
-                style="padding-left: 4px"
-                color="grey"
-              />
-            </q-btn>
-            <q-skeleton type="text" width="20px" />
-          </q-item-label>
-        </q-item-section>
-      </q-item>
-    </q-list>
+        <q-list separator v-if="isLoading">
+          <q-item v-for="index in 20" :key="index">
+            <q-item-section>
+              <q-item-label class="row">
+                <q-skeleton type="text" class="q-mr-md" width="30%" />
+                <q-skeleton type="text" class="q-mr-sm" width="8%" />
+                <q-skeleton type="text" class="q-mr-sm" width="8%" />
+                <q-skeleton type="text" class="q-mr-sm" width="8%" />
+              </q-item-label>
+              <q-item-label>
+                <q-skeleton type="text" />
+                <q-skeleton type="text" width="80%" />
+              </q-item-label>
+              <br />
+              <q-item-label class="row" caption>
+                <q-btn flat round>
+                  <q-icon
+                    name="fas fa-thumbs-up"
+                    style="padding-right: 4px"
+                    color="grey"
+                  />
+                </q-btn>
+                <q-skeleton type="text" width="20px" />
+                <q-btn flat round class="q-ml-sm">
+                  <q-icon
+                    name="fas fa-thumbs-down flip-horizontal"
+                    style="padding-left: 4px"
+                    color="grey"
+                  />
+                </q-btn>
+                <q-skeleton type="text" width="20px" />
+              </q-item-label>
+            </q-item-section>
+          </q-item>
+        </q-list>
 
-    <q-list bordered separator v-if="!isLoading && words?.length === 0">
-      <q-item clickable v-ripple>
-        <q-item-section class="q-my-xl">
-          <div class="text-center">
-            <q-icon name="fas fa-bars" size="100px" color="dark" />
-          </div>
-          <q-item-label class="text-center text-dark q-mt-xl">
-            <h6 class="q-my-none">
-              <b>Connection REFUSED...</b>
-            </h6>
-          </q-item-label>
-        </q-item-section>
-      </q-item>
-    </q-list>
+        <q-list separator v-if="!isLoading && words?.length === 0">
+          <q-item clickable v-ripple>
+            <q-item-section class="q-my-xl">
+              <div class="text-center">
+                <q-icon name="fas fa-bars" size="100px" color="dark" />
+              </div>
+              <q-item-label class="text-center text-dark q-mt-xl">
+                <h6 class="q-my-none">
+                  <b>Connection REFUSED...</b>
+                </h6>
+              </q-item-label>
+            </q-item-section>
+          </q-item>
+        </q-list>
+      </q-card-section>
+    </q-card>
   </div>
 </template>
 
@@ -309,35 +326,23 @@ export default defineComponent({
 </script>
 
 <style lang="scss" scoped>
-.search-input {
-  display: none;
-  width: 17vw;
+.card-header {
+  font-size: 1.35rem;
+  font-weight: bold;
+  color: rgba(255, 255, 255, 0.8);
+  background-color: rgba(12, 69, 176, 0.9);
 }
-.toggle-input {
-  display: inline-block;
+
+.my-card {
+  box-shadow: none;
+  border: 1px solid rgba(0, 0, 0, 0.12);
 }
-.cancel-icon {
-  color: rgba(0, 0, 0, 0.7);
-}
-.cancel-icon:hover {
-  color: rgba(193, 0, 21, 0.9);
-}
-.word-meaning,
-.author {
-  span {
-    color: #000000;
-  }
-}
-.example-usage {
-  em {
-    color: rgba(44, 62, 80, 0.85);
-  }
+
+.q-item {
+  padding: 8px 4px;
 }
 
 @media only screen and (max-width: 575px) {
-  .search-input {
-    width: 50vw;
-  }
   .words {
     margin-right: 0;
     padding: 0;
