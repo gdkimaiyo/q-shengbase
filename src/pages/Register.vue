@@ -28,7 +28,7 @@
                 <q-item-section>
                   <span>
                     <q-icon name="fas fa-circle-check q-pr-sm" size="24px" />
-                    Participate in weekly ShengBase Trivia
+                    Earn points by adding sheng words
                   </span>
                 </q-item-section>
               </q-item>
@@ -50,7 +50,7 @@
         </div>
         <div class="register-form">
           <h5 class="logo-btn q-my-none q-pb-md" @click="navigateTo('/')">
-            <span class="href-link">ShengBase</span>
+            ShengBase
           </h5>
           <div class="text-h5 q-pb-sm text-weight-bold">
             Create Your Account
@@ -65,7 +65,7 @@
       <div class="info-mobile q-mt-lg q-mb-none q-pt-md">
         <p class="q-my-none q-py-md q-px-lg">
           Registering for an account enables you to add or vote for a sheng word
-          and participate in weekly ShengBase Trivia
+          and earn points.
         </p>
         <p class="q-my-none q-py-md q-px-lg">
           <span
@@ -140,15 +140,21 @@ export default defineComponent({
   margin: 0 auto;
 }
 .href-link {
-  color: #0c45b0;
+  color: green;
   cursor: pointer;
 }
 .logo-btn {
   font-size: 1.7rem;
   font-weight: bold;
+  cursor: pointer;
+  color: green;
+}
+.logo-btn:hover {
+  color: rgba(0, 128, 0, 0.85);
 }
 .href-link:hover {
-  color: rgba(12, 69, 176, 0.85);
+  color: rgba(0, 128, 0, 0.85);
+  // color: rgba(83, 183, 129, 0.85);
 }
 .faqs-link:hover {
   color: rgba(255, 255, 1255, 0.7);

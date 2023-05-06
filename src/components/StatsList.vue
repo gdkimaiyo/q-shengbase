@@ -1,5 +1,5 @@
 <template>
-  <div class="stats">
+  <div class="stats q-mt-lg q-mb-xl q-px-sm">
     <q-card class="stats-card">
       <q-card-section>
         <div class="row">
@@ -107,7 +107,7 @@ export default defineComponent({
   margin-top: 30px;
   height: 128px;
   color: #fff;
-  background-color: rgba(12, 69, 176, 0.9);
+  background-color: rgba(83, 183, 129);
 }
 .stat-title {
   font-size: 1.5rem;
@@ -119,6 +119,8 @@ export default defineComponent({
   font-weight: 700;
 }
 @media only screen and (max-width: 575px) {
-  //
+  .stats-card {
+    border-radius: none !important;
+  }
 }
 </style>

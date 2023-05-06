@@ -38,6 +38,9 @@
         </template>
       </q-btn>
       <span v-if="isLoading" class="q-pl-md">Signing In...</span>
+      <div class="q-mt-lg">
+        <a class="href-link" @click="forgotPass()"> Forgot password </a>
+      </div>
     </div>
   </q-form>
 </template>
@@ -119,11 +122,29 @@ export default defineComponent({
     },
 
     validateEmail,
+
+    forgotPass() {
+      Notify.create({
+        type: "info",
+        color: "teal",
+        position: "center",
+        message: "Feature is in development. It will be available soon.",
+        group: false,
+      });
+    },
   },
 });
 </script>
 
 <style lang="scss" scoped>
+.href-link {
+  color: green;
+  cursor: pointer;
+}
+.href-link:hover {
+  color: rgba(0, 128, 0, 0.85);
+}
+
 @media only screen and (max-width: 575px) {
   //
 }
