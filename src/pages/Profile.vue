@@ -306,8 +306,7 @@
                 @click="(showInfo = true), (viewPointsTallying = false)"
               >
                 <q-icon name="fas fa-circle-question" class="q-pr-sm" />
-                <span v-if="showInfo">Hide Info</span>
-                <span v-else>Show Info</span>
+                <span>How to?</span>
               </a>
             </div>
             <q-separator inset class="sep-inset q-mt-sm" />
@@ -353,8 +352,7 @@
                       Points tallying history unavailable!
                     </q-item-label>
                     <q-item-label caption lines="2">
-                      Start by adding sheng words to earn points. Also,
-                      participate in weekly <b>Trivia</b> to earn points.
+                      Start by adding sheng words to earn points.
                     </q-item-label>
                   </q-item-section>
                 </q-item>
@@ -379,11 +377,6 @@
               <p class="p-info">
                 Every 5 words you add earns you 1 point. Also, every 5 likes of
                 all cumulative likes from the words you add, earns you 1 point.
-              </p>
-              <p class="p-info">
-                Lastly, participating in
-                <b style="color: rgba(0, 0, 0, 0.55)">ShengBase Trivia</b> and
-                answering quizzes correctly earns you points.
               </p>
             </div>
           </q-tab-panel>

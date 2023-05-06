@@ -1,71 +1,58 @@
 <template>
   <div class="words q-mr-md q-pa-md">
-    <div class="row q-mb-sm q-ml-sm">
-      <div class="col-8">
-        <q-input
-          rounded
-          outlined
-          dense
-          v-model="searchTerm"
-          placeholder="Word search"
-          class="q-mr-sm"
-          @keyup.enter="startSearch"
-        >
-          <template v-slot:prepend>
-            <q-btn round dense flat icon="search" @click="startSearch" />
-          </template>
-          <template v-slot:append>
-            <q-btn
-              v-if="searchTerm !== ''"
-              round
-              dense
-              flat
-              icon="close"
-              @click="clearSearch"
-            />
-          </template>
-        </q-input>
-      </div>
-      <div class="col-4 text-right">
-        <q-btn
-          no-caps
-          rounded
-          unelevated
-          color="primary"
-          class="gt-sm q-ml-md"
-          @click="openFormDialog"
-        >
-          <q-icon name="fas fa-plus" />
-          <span class="q-pl-sm">Add Word</span>
-        </q-btn>
-
+    <q-input
+      borderless
+      bg-color="grey-3"
+      v-model="searchTerm"
+      label-color="text-black"
+      placeholder="Word search"
+      standout="bg-dark text-black"
+      class="search-input font-weight-bold"
+      @keyup.enter="startSearch"
+    >
+      <template v-slot:prepend>
         <q-btn
           round
+          flat
+          icon="search"
+          class="search-icon"
+          @click="startSearch"
+        />
+      </template>
+      <template v-slot:append>
+        <q-btn
+          v-if="searchTerm !== ''"
+          round
+          dense
+          flat
+          icon="close"
+          @click="clearSearch"
+        />
+        <q-btn
+          unelevated
           color="primary"
-          class="lt-md q-ml-md"
-          @click="openFormDialog"
-        >
-          <q-icon name="fas fa-plus" />
-        </q-btn>
-      </div>
+          class="search-btn"
+          label="Search"
+          @click="startSearch"
+        />
+      </template>
+    </q-input>
 
-      <div class="q-pa-md q-gutter-sm">
-        <q-dialog v-model="isOpen" persistent>
-          <AddWordForm @wordAdded="onAddWord" />
-        </q-dialog>
-      </div>
+    <div class="q-pa-md q-gutter-sm">
+      <q-dialog v-model="isOpen" persistent>
+        <AddWordForm @wordAdded="onAddWord" />
+      </q-dialog>
     </div>
 
-    <q-card class="my-card">
-      <q-card-section class="card-header"> Sheng Words </q-card-section>
+    <q-card class="my-card q-mb-xl" v-if="beginSearch">
       <q-card-section class="q-pt-none q-mt-md">
         <q-list separator v-if="beginSearch">
           <q-item v-if="inProgress" class="q-py-none">
             <q-item-section>
               <q-item-label>
                 <h6 class="q-mt-md q-mb-none text-primary">
-                  <span style="color: rgba(12, 69, 176, 0.87)"
-                    >Searching for
+                  <span style="color: rgba(12, 69, 176, 0.87)">
+                    Searching for
                   </span>
                   <b class="q-pr-sm">{{ searchPhrase }}</b>
                   <q-spinner-dots size="1.5em" />
@@ -107,7 +94,6 @@
               </q-item-label>
             </q-item-section>
           </q-item>
-          <q-separator spaced v-if="!inProgress && results?.length === 0" />
         </q-list>
 
         <q-list
@@ -116,9 +102,41 @@
           class="q-pb-md"
         >
           <WordHolder :words="results" :isSearchResult="true" />
-          <q-separator spaced />
         </q-list>
+      </q-card-section>
+    </q-card>
 
+    <q-card class="my-card">
+      <q-card-section class="card-header">
+        <div class="row">
+          <div class="col">Sheng Words</div>
+          <div class="col text-right">
+            <q-btn
+              no-caps
+              rounded
+              unelevated
+              color="white"
+              text-color="dark"
+              class="gt-sm q-ml-md"
+              @click="openFormDialog"
+            >
+              <q-icon name="fas fa-plus" />
+              <span class="q-pl-sm">Add Word</span>
+            </q-btn>
+
+            <q-btn
+              round
+              color="white"
+              text-color="primary"
+              class="lt-md q-ml-md"
+              @click="openFormDialog"
+            >
+              <q-icon name="fas fa-plus" />
+            </q-btn>
+          </div>
+        </div>
+      </q-card-section>
+      <q-card-section class="q-pt-none q-mt-md">
         <q-list separator v-if="!isLoading && words?.length > 0">
           <WordHolder :words="words" />
         </q-list>
@@ -260,7 +278,6 @@ export default defineComponent({
               }
             });
           }
-          // console.log(JSON.parse(JSON.stringify(this.words)));
           this.isLoading = false;
         })
         .catch((error) => {
@@ -326,11 +343,25 @@ export default defineComponent({
 </script>
 
 <style lang="scss" scoped>
+.search-input {
+  border-radius: 32px !important;
+  // background-color: #ffffff;
+}
+.search-icon {
+  margin-left: 16px;
+}
+.search-btn {
+  margin-right: 16px;
+}
+
 .card-header {
   font-size: 1.35rem;
   font-weight: bold;
   color: rgba(255, 255, 255, 0.8);
-  background-color: rgba(12, 69, 176, 0.9);
+  // background-color: rgba(12, 69, 176, 0.9);
+  background-color: rgba(83, 183, 129);
+  padding-top: 8px;
+  padding-bottom: 8px;
 }
 
 .my-card {
@@ -343,9 +374,17 @@ export default defineComponent({
 }
 
 @media only screen and (max-width: 575px) {
+  .search-input {
+    margin-bottom: 16px;
+  }
+  .search-icon {
+    margin-left: 4px;
+  }
+  .search-btn {
+    margin-right: 8px;
+  }
   .words {
     margin-right: 0;
-    padding: 0;
   }
 }
 </style>

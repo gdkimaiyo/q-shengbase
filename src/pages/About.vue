@@ -1,7 +1,6 @@
 <template>
   <q-page class="column q-pb-xl">
     <AfterNavBar
-      :imageSrc="src"
       title="About"
       :paths="paths"
       desc="Find out more about ShengBase"

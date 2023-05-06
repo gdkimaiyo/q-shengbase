@@ -4,7 +4,7 @@
       :show_paths="false"
       desc="Add or find trending sheng words in our ShengBase dictionary"
     />
-    <div class="main-page q-pa-md">
+    <div class="main-page q-py-md">
       <StatsList class="lt-sm" />
       <div class="row content q-mt-lg">
         <div class="col-xs-12 col-sm-8 col-md-8">
@@ -13,7 +13,7 @@
         <div class="col-xs-12 col-sm-4 col-md-4">
           <div class="gt-xs q-pa-md q-mt-lg"></div>
           <StatsList class="gt-xs" />
-          <TrendsList />
+          <TrendsList class="q-px-md" />
         </div>
       </div>
     </div>

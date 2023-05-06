@@ -1,5 +1,5 @@
 <template>
-  <div class="trends">
+  <div class="trends q-my-xl">
     <q-card class="trending-words">
       <q-card-section class="card-header"> Most Liked </q-card-section>
 
@@ -236,7 +236,8 @@ export default defineComponent({
   font-size: 1.35rem;
   font-weight: bold;
   color: rgba(255, 255, 255, 0.8);
-  background-color: rgba(12, 69, 176, 0.9);
+  background-color: rgba(83, 183, 129);
+  // background-color: rgba(12, 69, 176, 0.9);
 }
 
 .word {
@@ -252,6 +253,9 @@ export default defineComponent({
 }
 
 @media only screen and (max-width: 575px) {
+  .top-users {
+    margin-top: 48px;
+  }
   .logged-user {
     font-weight: normal;
   }

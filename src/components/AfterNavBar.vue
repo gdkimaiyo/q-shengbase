@@ -1,6 +1,6 @@
 <template>
   <div class="after-navbar bg-primary">
-    <div class="q-px-md q-pt-lg q-mb-md text-center">
+    <div class="q-px-md q-mb-md text-center">
       <div class="text-h3">{{ title }}</div>
       <div class="text-subtitle1 q-mt-md">{{ desc }}</div>
       <div class="page-path q-mt-sm" v-if="show_paths">
@@ -28,7 +28,7 @@ export default defineComponent({
   props: {
     imageSrc: {
       type: String,
-      default: "to-learn.jpg",
+      default: "black-board.jpg",
     },
     title: {
       type: String,
