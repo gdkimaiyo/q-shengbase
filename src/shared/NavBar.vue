@@ -1,5 +1,5 @@
 <template>
-  <q-header elevated id="navbar">
+  <q-header id="navbar">
     <q-toolbar class="toolbar q-py-sm">
       <q-toolbar-title>
         <a @click="goHome()" class="logo-btn" clickable>ShengBase</a>
@@ -170,9 +170,9 @@ export default defineComponent({
 </script>
 
 <style lang="scss" scoped>
-#navbar {
-  box-shadow: 0 3px 5px -1px #0003, 0 6px 10px #00000024, 0 1px 18px #0000001f;
-}
+// #navbar {
+//   box-shadow: 0 3px 5px -1px #0003, 0 6px 10px #00000024, 0 1px 18px #0000001f;
+// }
 .toolbar {
   width: 100%;
   max-width: 1024px;
@@ -194,11 +194,11 @@ export default defineComponent({
   font-size: 16px;
 }
 .nav-btn:hover {
-  color: #42b983;
+  color: #1d1d1d;
 }
 
 .active-link {
-  color: #42b983;
+  color: #1d1d1d;
 }
 
 #onHandset {

@@ -3,8 +3,8 @@
     <q-item-section>
       <q-item-label>
         <div
-          class="word q-mt-md q-mb-sm default-color"
-          :class="{ 'is-search-result text-weight-bold': isSearchResult }"
+          class="word text-dark text-weight-bold q-mt-md q-mb-sm default-color"
+          :class="{ 'is-search-result': isSearchResult }"
         >
           {{ word.word }}
           <span
@@ -20,6 +20,7 @@
         class="word-meaning"
         v-for="(meaning, index) in word.meaning"
         :key="meaning._id"
+        :class="{ 'q-mb-lg': index === word.meaning?.length - 1 }"
       >
         <sup
           v-if="word.meaning.length > 1 && meaning?.meaning?.length > 0"
@@ -29,11 +30,11 @@
         </sup>
         <span v-if="meaning?.meaning?.length > 0">{{ meaning?.meaning }}</span>
       </q-item-label>
-      <br />
       <q-item-label
         class="example-usage"
         v-for="(meaning, index) in word.meaning"
         :key="meaning._id"
+        :class="{ 'q-mb-lg': index === word.meaning?.length - 1 }"
       >
         <sup
           v-if="word.meaning.length > 1 && meaning?.usage?.length > 0"
@@ -43,8 +44,7 @@
         </sup>
         <em v-if="meaning?.usage?.length > 0">{{ meaning?.usage }}</em>
       </q-item-label>
-      <br />
-      <q-item-label caption style="font-size: 0.85rem">
+      <q-item-label caption style="font-size: 0.85rem" class="q-mb-lg">
         <span>By </span>
         <span
           class="text-weight-bold"
@@ -67,7 +67,6 @@
           {{ word.origin }}
         </span>
       </q-item-label>
-      <br />
       <q-item-label>
         <span class="likes">
           <q-btn
@@ -329,7 +328,7 @@ export default defineComponent({
 
 .default-color,
 .like-btn {
-  color: #0c45b0;
+  color: #1d1d1d;
 }
 
 .is-search-result {
