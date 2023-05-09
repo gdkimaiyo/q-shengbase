@@ -46,6 +46,35 @@
           </div>
         </q-list>
       </div>
+
+      <div class="get-in-touch">
+        <h5 class="q-mb-lg text-primary text-weight-bold">Get in Touch</h5>
+        <div class="contacts">
+          <div class="q-py-sm" v-for="(social, index) in socials" :key="index">
+            <q-icon
+              :name="social.icon"
+              class="contact-icon q-pr-sm"
+              size="18px"
+            />
+            <a
+              :href="social.active ? 'mailto:' + social.link : ''"
+              class="href-link"
+              v-if="social.social === 'email'"
+            >
+              {{ social.name }}
+            </a>
+
+            <a
+              :href="social.active ? social.link : ''"
+              rel="noopener noreferrer"
+              class="href-link"
+              v-else
+            >
+              {{ social.name }}
+            </a>
+          </div>
+        </div>
+      </div>
     </div>
   </q-page>
 </template>
@@ -53,7 +82,7 @@
 <script>
 import { defineComponent, ref } from "vue";
 import AfterNavBar from "../components/AfterNavBar.vue";
-import { FAQS } from "../utils/contants.js";
+import { FAQS, SOCIALS } from "../utils/contants.js";
 
 export default defineComponent({
   // eslint-disable-next-line vue/multi-word-component-names
@@ -68,6 +97,7 @@ export default defineComponent({
       src: ref("abcd.jpg"),
       paths: ref(["Home", "About"]),
       faqs: ref(FAQS),
+      socials: ref(SOCIALS),
     };
   },
 });
@@ -82,4 +112,18 @@ export default defineComponent({
 // .faq-content {
 //   color: rgba(12, 69, 176);
 // }
+.faqs,
+.get-in-touch {
+  margin-bottom: 48px;
+}
+.contacts {
+  margin-left: 12px;
+}
+.href-link {
+  color: #007bff;
+  text-decoration: none;
+}
+.contact-icon {
+  color: #6c757d;
+}
 </style>
