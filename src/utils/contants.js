@@ -43,6 +43,37 @@ export const REGISTER_FAQS = [
   },
 ];
 
+export const SOCIALS = [
+  {
+    social: "email",
+    name: "hello@shengbase@gmail.com",
+    link: "hello@shengbase@gmail.com",
+    icon: "fas fa-envelope",
+    active: false,
+  },
+  {
+    social: "twitter",
+    name: "@shengbase",
+    link: "https://twitter.com",
+    icon: "fab fa-twitter",
+    active: false,
+  },
+  {
+    social: "facebook",
+    name: "ShengBase",
+    link: "https://www.facebook.com",
+    icon: "fab fa-facebook",
+    active: false,
+  },
+  {
+    social: "instagram",
+    name: "shengbase",
+    link: "https://www.instagram.com",
+    icon: "fab fa-instagram",
+    active: false,
+  },
+];
+
 export const BANNED_WORDS = [
   "kuma",
   "fuck",
