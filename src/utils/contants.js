@@ -49,7 +49,7 @@ export const SOCIALS = [
     name: "hello@shengbase@gmail.com",
     link: "hello@shengbase@gmail.com",
     icon: "fas fa-envelope",
-    active: true,
+    active: false,
   },
   {
     social: "twitter",
