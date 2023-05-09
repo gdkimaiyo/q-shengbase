@@ -40,8 +40,8 @@
                   <q-item-section avatar>
                     <q-avatar color="primary" text-color="white" size="72px">
                       <span class="user-initials">
-                        {{ user.firstname.charAt(0) }}
-                        {{ user.lastname.charAt(0) }}
+                        <span>{{ user.firstname.charAt(0) }}</span>
+                        <span>{{ user.lastname.charAt(0) }}</span>
                       </span>
                     </q-avatar>
                   </q-item-section>
