@@ -63,7 +63,7 @@ module.exports = configure(function (/* ctx */) {
 
       // rebuildCache: true, // rebuilds Vite/linter/etc cache on startup
 
-      publicPath: process.env.NODE_ENV === "production" ? "/shengbase/" : "/",
+      // publicPath: process.env.NODE_ENV === "production" ? "/shengbase/" : "/",
       // analyze: true,
       env: {
         VUE_APP_BACKEND_API: process.env.VUE_APP_BACKEND_API,
